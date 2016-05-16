@@ -7,7 +7,7 @@ module.exports = {
 
   init: function(network, game) {
     _.each(network, _.bind(function(nodeConfig) {
-      this.nodes.push(new Node(nodeConfig, this.nodes, game));
+      this.nodes.push(new Node(nodeConfig, null, this.nodes, game));
     }, this));
   },
 

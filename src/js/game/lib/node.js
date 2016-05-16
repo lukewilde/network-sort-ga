@@ -1,9 +1,11 @@
 var properties = require('../properties');
 var _ = require('lodash');
 
-function Node(config, otherNodes, game) {
+function Node(config, mate, otherNodes, game) {
 
   this.game = game;
+
+  this.mutationRate = 0.001;
 
   this.config = config;
   this.otherNodes = otherNodes;
@@ -14,12 +16,30 @@ function Node(config, otherNodes, game) {
   this.width = 160;
   this.height = 120;
 
-  this.x = Math.round(Math.random() * (properties.size.x - this.width));
-  this.y = Math.round(Math.random() * (properties.size.y - this.height));
+  if (mate) {
+    this.x = this.getGene('x', mate);
+    this.y = this.getGene('y', mate);
+  } else {
+    this.x = Math.round(Math.random() * (properties.size.x - this.width));
+    this.y = Math.round(Math.random() * (properties.size.y - this.height));
+  }
 
   this.centerX = this.x + (this.width / 2);
   this.centerY = this.y + (this.height / 2);
 }
+
+Node.prototype.getGene = function(gene, mate) {
+  var takeGeneFromMate = Math.random() > (0.5 - this.mutationRate / 2);
+  var shouldMutateGene = Math.random() > 1 - this.mutationRate;
+
+  if (takeGeneFromMate) {
+    return mate[gene];
+  } else if (shouldMutateGene) {
+    return Math.round(Math.random() * (properties.size[gene] - this.width));
+  } else {
+    return this[gene];
+  }
+};
 
 Node.prototype.draw = function() {
   this.drawBox();
