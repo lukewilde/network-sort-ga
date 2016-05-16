@@ -12,9 +12,11 @@ module.exports = {
   },
 
   draw: function() {
+
     _.each(this.nodes, function(node) {
       node.drawBox();
     });
+
     _.each(this.nodes, function(node) {
       node.drawConnections();
     });

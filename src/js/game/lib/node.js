@@ -22,8 +22,8 @@ function Node(config, otherNodes, game) {
 }
 
 Node.prototype.draw = function() {
-  // this.drawBox();
-  // this.drawConnections();
+  this.drawBox();
+  this.drawConnections();
 };
 
 Node.prototype.drawConnections = function() {
