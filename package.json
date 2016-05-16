@@ -1,14 +1,14 @@
 {
-  "name": "phaser-js-boilerplate",
+  "name": "network-sort",
   "version": "1.0.0",
-  "description": "A Grunty Phaser.js SDK",
+  "description": "",
   "main": "build/js/app.min.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:lukewilde/phaser-js-boilerplate.git"
+    "url": ""
   },
   "author": "Luke Wilde",
   "license": "MIT",

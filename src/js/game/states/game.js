@@ -1,8 +1,10 @@
 var game = {};
+var nodeManager = require('../lib/node-manager');
+var smallNetwork = require('../graphs/small');
 
 game.create = function () {
-  var logo = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, 'logo');
-  logo.anchor.setTo(0.5, 0.5);
+  nodeManager.init(smallNetwork, this.game);
+  nodeManager.draw(smallNetwork);
 };
 
 module.exports = game;
