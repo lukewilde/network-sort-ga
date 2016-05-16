@@ -7,13 +7,16 @@ module.exports = {
 
   init: function(network, game) {
     _.each(network, _.bind(function(nodeConfig) {
-      this.nodes.push(new Node(nodeConfig, game));
+      this.nodes.push(new Node(nodeConfig, this.nodes, game));
     }, this));
   },
 
   draw: function() {
     _.each(this.nodes, function(node) {
-      node.draw();
+      node.drawBox();
+    });
+    _.each(this.nodes, function(node) {
+      node.drawConnections();
     });
   }
 };
