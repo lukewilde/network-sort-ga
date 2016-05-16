@@ -5,10 +5,19 @@ module.exports = {
 
   nodes: [],
 
-  init: function(network, game) {
-    _.each(network, _.bind(function(nodeConfig) {
+  config: null,
+
+  init: function(config, game) {
+
+    this.config = config;
+
+    _.each(config, _.bind(function(nodeConfig) {
       this.nodes.push(new Node(nodeConfig, null, this.nodes, game));
     }, this));
+  },
+
+  calculateFitness: function() {
+
   },
 
   draw: function() {
