@@ -2,14 +2,13 @@ var properties = require('../properties');
 var _ = require('lodash');
 var calculateDistance = require('euclidean-distance');
 
-function Node(config, mate, otherNodes, game) {
+function Node(config, mate, game) {
 
   this.game = game;
 
   this.mutationRate = 0.001;
 
   this.config = config;
-  this.otherNodes = otherNodes;
 
   this.name = config.name;
   this.connections = config.connections;
@@ -59,7 +58,7 @@ Node.prototype.drawConnections = function() {
 
     var connectingNode = _.find(this.otherNodes, { name: connection.target });
 
-    console.info('drawing line from ', connectingNode.centerX, connectingNode.centerY);
+    // console.info('drawing line from ', connectingNode.centerX, connectingNode.centerY);
     graphics.moveTo(this.centerX, this.centerY);
     graphics.lineTo(connectingNode.centerX, connectingNode.centerY);
 
@@ -89,10 +88,6 @@ Node.prototype.getAreaOfOverlappingNodes = function() {
   var areaOfOverlappingNodes = 0;
 
   _.each(this.otherNodes, _.bind(function(node) {
-    if (node.name === this.name) {
-      return;
-    }
-
     var intersection = this.clipRect.intersection(node.clipRect);
     var intersectionArea = intersection.width && intersection.height;
     areaOfOverlappingNodes += intersectionArea;
@@ -103,8 +98,39 @@ Node.prototype.getAreaOfOverlappingNodes = function() {
 
 };
 
+Node.prototype.getNumberOfIntersectingLines = function() {
+
+  var currentLines = 0;
+
+  _.each(this.otherNodes, _.bind(function(node) {
+    _.each(node.connectingLines, _.bind(function(otherLine) {
+      _.each(this.connectingLines, function(line) {
+          if (line.intersects(otherLine)) {
+            currentLines ++;
+          }
+      });
+    }, this));
+  }, this));
+
+  return currentLines;
+};
+
+Node.prototype.setConnections = function(allNodes) {
+
+  this.otherNodes = _.reject(allNodes, { name: this.name });
+
+  this.connectingLines = _.map(this.connections, _.bind(function(connection) {
+
+    var connectingNode = _.find(this.otherNodes, { name: connection.target });
+    var line = new Phaser.Line(this.centerX, this.centerY, connectingNode.centerX, connectingNode.centerY);
+    line.name = connection.name;
+    line.target = connection.target;
+    return  line;
+  }, this));
+};
+
 Node.prototype.drawBox = function() {
-  console.info('drawing box: ', this.name, this.x, this.y);
+  // console.info('drawing box: ', this.name, this.x, this.y);
 
   var graphics = this.game.add.graphics(0, 0);
 

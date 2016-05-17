@@ -18,7 +18,11 @@ module.exports = {
     this.config = config;
 
     _.each(config, _.bind(function(nodeConfig) {
-      this.nodes.push(new Node(nodeConfig, null, this.nodes, game));
+      this.nodes.push(new Node(nodeConfig, null, game));
+    }, this));
+
+    _.each(this.nodes, _.bind(function (node) {
+      node.setConnections(this.nodes);
     }, this));
   },
 
@@ -26,23 +30,20 @@ module.exports = {
 
     this.fitness = 0;
 
-    var size = 0;
-    var areaOfOverlappingNodes = 0;
-
     console.info('Calculating Fitness');
     _.each(this.nodes, _.bind(function(node) {
 
       // Calculate total line distance.
-      size += node.getConnectionDistance() * this.sizeWeighting;
+      var size = node.getConnectionDistance() * this.sizeWeighting;
 
       // Check for nodes overlapping.
-      areaOfOverlappingNodes = node.getAreaOfOverlappingNodes() * this.intersectionWeighting;
+      var areaOfOverlappingNodes = node.getAreaOfOverlappingNodes() * this.intersectionWeighting;
 
       // check for line intersections.
+      var numberOfOverlappingLines = node.getNumberOfIntersectingLines();
 
-      console.info('size %s, overlapping area %s', size, areaOfOverlappingNodes);
+      console.log('node %s: size %s, overlapping area %s, overlapping lines %s', node.name, size, areaOfOverlappingNodes, numberOfOverlappingLines);
       this.fitness += size + areaOfOverlappingNodes;
-
     }, this));
 
     console.info('total fitness:', this.fitness);
