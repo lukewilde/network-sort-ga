@@ -1,5 +1,6 @@
 var properties = require('../properties');
 var _ = require('lodash');
+var calculateDistance = require('euclidean-distance');
 
 function Node(config, mate, otherNodes, game) {
 
@@ -26,6 +27,8 @@ function Node(config, mate, otherNodes, game) {
 
   this.centerX = this.x + (this.width / 2);
   this.centerY = this.y + (this.height / 2);
+
+  this.clipRect = new Phaser.Rectangle(this.x, this.y, this.width, this.height);
 }
 
 Node.prototype.getGene = function(gene, mate) {
@@ -59,8 +62,45 @@ Node.prototype.drawConnections = function() {
     console.info('drawing line from ', connectingNode.centerX, connectingNode.centerY);
     graphics.moveTo(this.centerX, this.centerY);
     graphics.lineTo(connectingNode.centerX, connectingNode.centerY);
+
     graphics.endFill();
+
   }, this));
+};
+
+Node.prototype.getConnectionDistance = function() {
+
+  var totalDistance = 0;
+
+  _.each(this.config.connections, _.bind(function(connection) {
+
+    var connectingNode = _.find(this.otherNodes, { name: connection.target });
+
+    var thisNode = [this.centerX, this.centerY];
+    var targetNode = [connectingNode.centerX, connectingNode.centerY];
+    totalDistance += calculateDistance(thisNode, targetNode);
+  }, this));
+
+  return totalDistance;
+};
+
+Node.prototype.getAreaOfOverlappingNodes = function() {
+
+  var areaOfOverlappingNodes = 0;
+
+  _.each(this.otherNodes, _.bind(function(node) {
+    if (node.name === this.name) {
+      return;
+    }
+
+    var intersection = this.clipRect.intersection(node.clipRect);
+    var intersectionArea = intersection.width && intersection.height;
+    areaOfOverlappingNodes += intersectionArea;
+
+  }, this));
+
+  return areaOfOverlappingNodes;
+
 };
 
 Node.prototype.drawBox = function() {

@@ -23,6 +23,7 @@
   "dependencies": {
     "browserify": "^13.0.0",
     "browserify-shim": "^3.8.12",
+    "euclidean-distance": "^1.0.0",
     "grunt": "^0.4.5",
     "grunt-browserify": "^5.0.0",
     "grunt-cache-bust": "^1.1.1",
