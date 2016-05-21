@@ -18,6 +18,7 @@ function Node(config, mate, game) {
 
   this.colour = Math.floor(Math.random() * 0XFFFFFF);
 
+  this.numberOfConnections = 0;
 
   if (mate) {
     this.x = this.getGene('x', mate);
@@ -77,6 +78,9 @@ Node.prototype.drawConnections = function() {
     graphics.moveTo(this.centerX, this.centerY);
     graphics.lineTo(connectingNode.centerX, connectingNode.centerY);
 
+    this.numberOfConnections ++;
+    connectingNode.numberOfConnections ++;
+
     graphics.endFill();
 
   }, this));
@@ -134,7 +138,7 @@ Node.prototype.getNumberOfIntersectingLines = function() {
     }, this));
   }, this));
 
-  return currentLines;
+  return currentLines - this.numberOfConnections;
 };
 
 Node.prototype.getNumberOfLineNodeIntersects = function() {
