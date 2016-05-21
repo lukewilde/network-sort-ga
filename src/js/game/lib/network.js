@@ -1,83 +1,95 @@
 var _ = require('lodash');
 var Node = require('./Node');
 
-module.exports = {
+function Network(config, game) {
+  this.nodes = [];
 
-  nodes: [],
+  this.sizeWeighting = 1;
 
-  fitness: Infinity,
+  this.intersectionWeighting = 10;
 
-  sizeWeighting: 1,
-
-  intersectionWeighting: 10,
-
-  weighting: {
+  this.weighting = {
     size: 1,
     area: 20,
     lines: 300,
     intersect: 1000
-  },
+  };
 
-  config: null,
+  _.each(config, _.bind(function(nodeConfig) {
+    this.nodes.push(new Node(nodeConfig, null, game));
+  }, this));
 
-  init: function(config, game) {
+  _.each(this.nodes, _.bind(function (node) {
+    node.setConnections(this.nodes);
+  }, this));
+}
 
-    this.config = config;
+Network.prototype.reportFitness = function() {
+  var fitness = 0;
+  var results = [];
 
-    _.each(config, _.bind(function(nodeConfig) {
-      this.nodes.push(new Node(nodeConfig, null, game));
-    }, this));
+  _.each(this.nodes, _.bind(function(node) {
 
-    _.each(this.nodes, _.bind(function (node) {
-      node.setConnections(this.nodes);
-    }, this));
-  },
+    // Calculate total line distance.
+    var size = node.getConnectionDistance() * this.weighting.size;
 
-  calculateFitness: function() {
+    // Check for nodes overlapping.
+    var areaOfOverlappingNodes = node.getAreaOfOverlappingNodes() * this.weighting.area;
 
-    this.fitness = 0;
-    var results = [];
+    // check for line intersections.
+    var numberOfOverlappingLines = node.getNumberOfIntersectingLines() * this.weighting.lines;
 
-    console.info('Calculating Fitness');
-    _.each(this.nodes, _.bind(function(node) {
+    // check if lines intersect with other nodes.
+    var numberOfLinesIntersectingNodes = node.getNumberOfLineNodeIntersects() * this.weighting.intersect;
 
-      // Calculate total line distance.
-      var size = node.getConnectionDistance() * this.weighting.size;
-
-      // Check for nodes overlapping.
-      var areaOfOverlappingNodes = node.getAreaOfOverlappingNodes() * this.weighting.area;
-
-      // check for line intersections.
-      var numberOfOverlappingLines = node.getNumberOfIntersectingLines() * this.weighting.lines;
-
-      // check if lines intersect with other nodes.
-      var numberOfLinesIntersectingNodes = node.getNumberOfLineNodeIntersects() * this.weighting.intersect;
-
-      results.push({
-        name: node.name,
-        size: size,
-        areaOfOverlappingNodes: areaOfOverlappingNodes,
-        numberOfOverlappingLines: numberOfOverlappingLines,
-        numberOfLinesIntersectingNodes: numberOfLinesIntersectingNodes
-      });
-
-      this.fitness += size + areaOfOverlappingNodes;
-    }, this));
-
-    console.table(results);
-    console.info('total fitness:', this.fitness);
-  },
-
-  draw: function() {
-
-    _.each(this.nodes, function(node) {
-      node.drawBox();
+    results.push({
+      name: node.name,
+      size: size,
+      areaOfOverlappingNodes: areaOfOverlappingNodes,
+      numberOfOverlappingLines: numberOfOverlappingLines,
+      numberOfLinesIntersectingNodes: numberOfLinesIntersectingNodes
     });
 
-    _.each(this.nodes, function(node) {
-      node.drawConnections();
-    });
+    fitness += size + areaOfOverlappingNodes + numberOfOverlappingLines + numberOfLinesIntersectingNodes;
+  }, this));
 
-    this.calculateFitness();
-  }
+  console.table(results);
 };
+
+Network.prototype.getFitness = function() {
+
+  var fitness = 0;
+  // var results = [];
+
+  _.each(this.nodes, _.bind(function(node) {
+
+    // Calculate total line distance.
+    var size = node.getConnectionDistance() * this.weighting.size;
+
+    // Check for nodes overlapping.
+    var areaOfOverlappingNodes = node.getAreaOfOverlappingNodes() * this.weighting.area;
+
+    // check for line intersections.
+    var numberOfOverlappingLines = node.getNumberOfIntersectingLines() * this.weighting.lines;
+
+    // check if lines intersect with other nodes.
+    var numberOfLinesIntersectingNodes = node.getNumberOfLineNodeIntersects() * this.weighting.intersect;
+
+    fitness += size + areaOfOverlappingNodes + numberOfOverlappingLines + numberOfLinesIntersectingNodes;
+  }, this));
+
+  return fitness;
+};
+
+Network.prototype.draw = function() {
+
+  _.each(this.nodes, function(node) {
+    node.drawBox();
+  });
+
+  _.each(this.nodes, function(node) {
+    node.drawConnections();
+  });
+};
+
+module.exports = Network;
