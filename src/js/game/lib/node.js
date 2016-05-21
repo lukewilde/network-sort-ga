@@ -16,6 +16,9 @@ function Node(config, mate, game) {
   this.width = 160;
   this.height = 120;
 
+  this.colour = Math.floor(Math.random() * 0XFFFFFF);
+
+
   if (mate) {
     this.x = this.getGene('x', mate);
     this.y = this.getGene('y', mate);
@@ -63,8 +66,8 @@ Node.prototype.draw = function() {
 Node.prototype.drawConnections = function() {
 
   var graphics = this.game.add.graphics(0, 0);
-  graphics.beginFill(0xFF3300);
-  graphics.lineStyle(3, 0xFFFFFF, 1);
+  graphics.beginFill(this.colour);
+  graphics.lineStyle(3, this.colour, 1);
 
   _.each(this.config.connections, _.bind(function(connection) {
 
@@ -176,8 +179,8 @@ Node.prototype.drawBox = function() {
 
   var graphics = this.game.add.graphics(0, 0);
 
-  graphics.beginFill(0xFF3300);
-  graphics.lineStyle(10, 0xffd900, 1);
+  graphics.beginFill(this.colour);
+  graphics.lineStyle(10, this.colour, 1);
   graphics.drawRect(this.x, this.y, this.width, this.height);
 
   var fontSize = 52;
