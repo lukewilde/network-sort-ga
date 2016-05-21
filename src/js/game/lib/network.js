@@ -13,9 +13,9 @@ module.exports = {
 
   weighting: {
     size: 1,
-    area: 1,
-    lines: 1,
-    intersect: 1
+    area: 20,
+    lines: 300,
+    intersect: 1000
   },
 
   config: null,
