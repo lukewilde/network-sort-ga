@@ -92,7 +92,7 @@ Node.prototype.getConnectionDistance = function() {
     totalDistance += calculateDistance(thisNode, targetNode);
   }, this));
 
-  return totalDistance;
+  return Math.round(totalDistance);
 };
 
 Node.prototype.getAreaOfOverlappingNodes = function() {

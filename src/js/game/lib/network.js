@@ -36,6 +36,7 @@ module.exports = {
   calculateFitness: function() {
 
     this.fitness = 0;
+    var results = [];
 
     console.info('Calculating Fitness');
     _.each(this.nodes, _.bind(function(node) {
@@ -52,10 +53,17 @@ module.exports = {
       // check if lines intersect with other nodes.
       var numberOfLinesIntersectingNodes = node.getNumberOfLineNodeIntersects() * this.weighting.intersect;
 
-      console.log('node %s: size %s, overlapping area %s, overlapping lines %s, line / node intersection %s', node.name, size, areaOfOverlappingNodes, numberOfOverlappingLines, numberOfLinesIntersectingNodes);
+      results.push({
+        size: size,
+        areaOfOverlappingNodes: areaOfOverlappingNodes,
+        numberOfOverlappingLines: numberOfOverlappingLines,
+        numberOfLinesIntersectingNodes: numberOfLinesIntersectingNodes
+      });
+
       this.fitness += size + areaOfOverlappingNodes;
     }, this));
 
+    console.table(results);
     console.info('total fitness:', this.fitness);
   },
 
