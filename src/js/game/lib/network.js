@@ -11,6 +11,13 @@ module.exports = {
 
   intersectionWeighting: 10,
 
+  weighting: {
+    size: 1,
+    area: 1,
+    lines: 1,
+    intersect: 1
+  },
+
   config: null,
 
   init: function(config, game) {
@@ -34,15 +41,18 @@ module.exports = {
     _.each(this.nodes, _.bind(function(node) {
 
       // Calculate total line distance.
-      var size = node.getConnectionDistance() * this.sizeWeighting;
+      var size = node.getConnectionDistance() * this.weighting.size;
 
       // Check for nodes overlapping.
-      var areaOfOverlappingNodes = node.getAreaOfOverlappingNodes() * this.intersectionWeighting;
+      var areaOfOverlappingNodes = node.getAreaOfOverlappingNodes() * this.weighting.area;
 
       // check for line intersections.
-      var numberOfOverlappingLines = node.getNumberOfIntersectingLines();
+      var numberOfOverlappingLines = node.getNumberOfIntersectingLines() * this.weighting.lines;
 
-      console.log('node %s: size %s, overlapping area %s, overlapping lines %s', node.name, size, areaOfOverlappingNodes, numberOfOverlappingLines);
+      // check if lines intersect with other nodes.
+      var numberOfLinesIntersectingNodes = node.getNumberOfLineNodeIntersects() * this.weighting.intersect;
+
+      console.log('node %s: size %s, overlapping area %s, overlapping lines %s, line / node intersection %s', node.name, size, areaOfOverlappingNodes, numberOfOverlappingLines, numberOfLinesIntersectingNodes);
       this.fitness += size + areaOfOverlappingNodes;
     }, this));
 

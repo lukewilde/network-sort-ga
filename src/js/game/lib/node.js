@@ -28,6 +28,18 @@ function Node(config, mate, game) {
   this.centerY = this.y + (this.height / 2);
 
   this.clipRect = new Phaser.Rectangle(this.x, this.y, this.width, this.height);
+
+  var bottomLeft = this.clipRect.bottomLeft;
+  var bottomRight = this.clipRect.bottomRight;
+  var topRight = this.clipRect.topRight;
+  var topLeft = this.clipRect.topLeft;
+
+  this.edges = [
+    new Phaser.Line(bottomLeft.x, bottomLeft.y, topLeft.x, topLeft.y),
+    new Phaser.Line(topLeft.x, topLeft.y, topRight.x, topRight.y),
+    new Phaser.Line(topRight.x, topRight.y, bottomRight.x, bottomRight.y),
+    new Phaser.Line(bottomRight.x, bottomRight.y, bottomLeft.x, bottomLeft.y),
+  ];
 }
 
 Node.prototype.getGene = function(gene, mate) {
@@ -122,13 +134,36 @@ Node.prototype.getNumberOfIntersectingLines = function() {
   return currentLines;
 };
 
+Node.prototype.getNumberOfLineNodeIntersects = function() {
+
+  var total = 0;
+
+  var disconnectedNodes = _.difference(this.otherNodes, this.connectingNodes);
+
+  _.each(disconnectedNodes, _.bind(function(node) {
+    _.each(this.connectingLines, function(line) {
+      _.each(node.edges, function(edge) {
+        if (edge.intersects(line)) {
+          total ++;
+        }
+      });
+    });
+  }, this));
+
+  return total;
+};
+
 Node.prototype.setConnections = function(allNodes) {
 
   this.otherNodes = _.reject(allNodes, { name: this.name });
+  this.connectingNodes = [];
 
   this.connectingLines = _.map(this.connections, _.bind(function(connection) {
 
     var connectingNode = _.find(this.otherNodes, { name: connection.target });
+
+    this.connectingNodes.push(connectingNode);
+
     var line = new Phaser.Line(this.centerX, this.centerY, connectingNode.centerX, connectingNode.centerY);
     line.name = connection.name;
     line.target = connection.target;
