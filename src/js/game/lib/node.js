@@ -184,7 +184,6 @@ Node.prototype.drawBox = function() {
   var graphics = this.game.add.graphics(0, 0);
 
   graphics.beginFill(this.colour);
-  graphics.lineStyle(10, this.colour, 1);
   graphics.drawRect(this.x, this.y, this.width, this.height);
 
   var fontSize = 52;
