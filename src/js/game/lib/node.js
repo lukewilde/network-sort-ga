@@ -145,9 +145,7 @@ Node.prototype.getNumberOfLineNodeIntersects = function() {
 
   var total = 0;
 
-  var disconnectedNodes = _.difference(this.otherNodes, this.connectingNodes);
-
-  _.each(disconnectedNodes, _.bind(function(node) {
+  _.each(this.otherNodes, _.bind(function(node) {
     _.each(this.connectingLines, function(line) {
       _.each(node.edges, function(edge) {
         if (edge.intersects(line)) {
