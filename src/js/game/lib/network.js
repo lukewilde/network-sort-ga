@@ -10,7 +10,7 @@ function Network(config, game) {
 
   this.weighting = {
     size: 1,
-    area: 20,
+    area: 25,
     lines: 300,
     intersect: 1000
   };
