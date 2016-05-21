@@ -54,6 +54,7 @@ module.exports = {
       var numberOfLinesIntersectingNodes = node.getNumberOfLineNodeIntersects() * this.weighting.intersect;
 
       results.push({
+        name: node.name,
         size: size,
         areaOfOverlappingNodes: areaOfOverlappingNodes,
         numberOfOverlappingLines: numberOfOverlappingLines,
