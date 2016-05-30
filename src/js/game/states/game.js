@@ -8,7 +8,7 @@ game.create = function () {
   var fittestNetwork;
   var lowScore = Infinity;
 
-  _.times(1E5, _.bind(function() {
+  _.times(10, _.bind(function() {
       var network = new Network(smallNetwork, this.game);
       var fitness = network.getFitness();
 
