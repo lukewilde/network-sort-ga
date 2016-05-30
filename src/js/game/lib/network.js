@@ -3,6 +3,8 @@ var Node = require('./Node');
 
 function Network(config, game) {
   this.nodes = [];
+  this.config = config;
+  this.game = game;
 
   this.sizeWeighting = 1;
 
@@ -14,11 +16,17 @@ function Network(config, game) {
     lines: 300,
     intersect: 1000
   };
+}
 
-  _.each(config, _.bind(function(nodeConfig) {
-    this.nodes.push(new Node(nodeConfig, null, game));
+Network.prototype.getFirstGeneration = function() {
+  _.each(this.config, _.bind(function(nodeConfig) {
+    this.nodes.push(new Node(nodeConfig, null, null, this.game));
   }, this));
 
+  this.connectNodes();
+};
+
+Network.prototype.connectNodes = function() {
   _.each(this.nodes, _.bind(function (node) {
     node.setConnections(this.nodes);
   }, this));
@@ -27,7 +35,18 @@ function Network(config, game) {
 
   this.fitness = this.getFitness();
   this.normalisedFitness = 0;
-}
+};
+
+Network.prototype.coinFlipMate = function(mate) {
+  var child = new Network(this.config, this.game);
+
+  _.each(this.nodes, _.bind(function(node, index) {
+    child.nodes.push(new Node(node.config, node, mate.nodes[index], this.game));
+  }, this));
+
+  child.connectNodes(child.nodes);
+  return child;
+};
 
 Network.prototype.getGenotype = function() {
   return _.map(this.nodes, 'genotype');

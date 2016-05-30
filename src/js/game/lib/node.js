@@ -3,12 +3,12 @@ var _ = require('lodash');
 var calculateDistance = require('euclidean-distance');
 var md5 = require('md5');
 
-function Node(config, mate, game) {
+function Node(config, mother, father, game) {
 
   this.game = game;
 
   this.mutationRate = 0.001;
-  this.maxMutationMagnitude = 0.1;
+  this.maxMutationMagnitude = 0.2;
 
   this.config = config;
 
@@ -25,9 +25,9 @@ function Node(config, mate, game) {
 
   this.numberOfConnections = 0;
 
-  if (mate) {
-    this.x = this.inheritGene('x', mate);
-    this.y = this.inheritGene('y', mate);
+  if (mother && father) {
+    this.x = this.inheritGene('x', mother, father);
+    this.y = this.inheritGene('y', mother, father);
   } else {
     this.x = Math.round(Math.random() * (properties.size.x - this.width));
     this.y = Math.round(Math.random() * (properties.size.y - this.height));
@@ -53,16 +53,16 @@ function Node(config, mate, game) {
   ];
 }
 
-Node.prototype.inheritGene = function(gene, mate) {
-  var takeGeneFromMate = Math.random() > (0.5 - this.mutationRate / 2);
+Node.prototype.inheritGene = function(gene, mother, father) {
+  var takeGeneFromMother = Math.random() > (0.5 - this.mutationRate / 2);
   var shouldMutateGene = Math.random() > 1 - this.mutationRate;
 
-  if (takeGeneFromMate) {
-    return mate.getGene(gene);
+  if (takeGeneFromMother) {
+    return mother.getGene(gene);
   } else if (shouldMutateGene) {
-    return this.getGene(gene) * _.random(0, this.maxMutationMagnitude);
+    return mother.getGene(gene) * _.random(0, this.maxMutationMagnitude);
   } else {
-    return this[gene];
+    return father[gene];
   }
 };
 
