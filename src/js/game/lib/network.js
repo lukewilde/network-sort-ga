@@ -24,9 +24,12 @@ function Network(config, game) {
   }, this));
 
   this.genotype = this.getGenotype();
+
+  this.fitness = this.getFitness();
+  this.normalisedFitness = 0;
 }
 
-Network.prototype.reportFitness = function() {
+Network.prototype.getGenotype = function() {
   return _.map(this.nodes, 'genotype');
 };
 

@@ -1,27 +1,12 @@
 var game = {};
-var Network = require('../lib/network');
-var smallNetwork = require('../graphs/small');
-var _ = require('lodash');
+var matingBucket = require('../lib/mating-bucket');
+var populationSize = 100;
 
 game.create = function () {
+  var fittest = matingBucket(populationSize, this.game);
 
-  var fittestNetwork;
-  var lowScore = Infinity;
-
-  _.times(10, _.bind(function() {
-      var network = new Network(smallNetwork, this.game);
-      var fitness = network.getFitness();
-
-      if (fitness < lowScore) {
-        fittestNetwork = network;
-        lowScore = fitness;
-      }
-    }, this));
-
-  fittestNetwork.draw();
-  fittestNetwork.reportFitness();
-
-  console.log('winning fitness: %s', lowScore);
+  fittest.draw();
+  fittest.reportFitness();
 };
 
 module.exports = game;
