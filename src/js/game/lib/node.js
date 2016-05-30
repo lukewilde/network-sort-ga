@@ -1,6 +1,7 @@
 var properties = require('../properties');
 var _ = require('lodash');
 var calculateDistance = require('euclidean-distance');
+var md5 = require('md5');
 
 function Node(config, mate, game) {
 
@@ -16,7 +17,10 @@ function Node(config, mate, game) {
   this.width = 160;
   this.height = 120;
 
-  this.colour = Math.floor(Math.random() * 0XFFFFFF);
+  var hash = md5(this.name).substring(0, 6);
+  var colourCode = parseInt(hash, 16);
+
+  this.colour = parseInt(colourCode);
 
   this.numberOfConnections = 0;
 
@@ -199,5 +203,7 @@ Node.prototype.drawBox = function() {
 
   this.game.add.text(x, y, this.name, style);
 };
+
+
 
 module.exports = Node;
