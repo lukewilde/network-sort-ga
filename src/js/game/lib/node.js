@@ -7,8 +7,9 @@ function Node(config, mother, father, game) {
 
   this.game = game;
 
-  this.mutationRate = 0.001;
-  this.maxMutationMagnitude = 0.2;
+  this.mutationRate = 0.01;
+  this.approximationRate = 0.05;
+  this.maxApproxMagnitude = 0.1;
 
   this.config = config;
 
@@ -17,6 +18,11 @@ function Node(config, mother, father, game) {
 
   this.width = 160;
   this.height = 120;
+
+  this.max ={
+    x: properties.size.x - this.width,
+    y: properties.size.y - this.height
+  };
 
   var hash = md5(this.name).substring(0, 6);
   var colourCode = parseInt(hash, 16);
@@ -29,8 +35,8 @@ function Node(config, mother, father, game) {
     this.x = this.inheritGene('x', mother, father);
     this.y = this.inheritGene('y', mother, father);
   } else {
-    this.x = Math.round(Math.random() * (properties.size.x - this.width));
-    this.y = Math.round(Math.random() * (properties.size.y - this.height));
+    this.x = Math.round(Math.random() * this.max.x);
+    this.y = Math.round(Math.random() * this.max.y);
   }
 
   this.genotype = this.getGenotype();
@@ -54,20 +60,26 @@ function Node(config, mother, father, game) {
 }
 
 Node.prototype.inheritGene = function(gene, mother, father) {
-  var takeGeneFromMother = Math.random() > (0.5 - this.mutationRate / 2);
   var shouldMutateGene = Math.random() > 1 - this.mutationRate;
+  var takeGeneFromMother = Math.random() > (0.5 - this.mutationRate / 2);
+  var takeApproximateGene = Math.random() > 1 - this.approximationRate;
+  var result;
+
+  if (shouldMutateGene) {
+    return Math.round(Math.random() * this.max[gene]);
+  }
 
   if (takeGeneFromMother) {
-    return mother.getGene(gene);
-  } else if (shouldMutateGene) {
-    return father[gene];
+    result = mother[gene];
   } else {
-    return mother.getGene(gene) * _.random(0, this.maxMutationMagnitude);
+    result = father[gene];
   }
-};
 
-Node.prototype.getGene = function(gene) {
-  return this[gene];
+  if (takeApproximateGene) {
+    result *= _.random(1 - this.maxApproxMagnitude, 1 + this.maxApproxMagnitude);
+  }
+
+  return Math.round(result);
 };
 
 Node.prototype.getGenotype = function() {
@@ -119,6 +131,16 @@ Node.prototype.getConnectionDistance = function() {
   }, this));
 
   return Math.round(totalDistance);
+};
+
+Node.prototype.isOutOfBounds = function() {
+
+  var offTop = this.y < 0;
+  var offLeft = this.x < 0;
+  var offRight = this.x > this.max.x;
+  var offBottom = this.y > this.max.y;
+
+  return offTop || offLeft || offRight || offBottom;
 };
 
 Node.prototype.getAreaOfOverlappingNodes = function() {

@@ -1,5 +1,4 @@
 var _ = require('lodash');
-var bucketSize = 100;
 
 module.exports = {
 
@@ -13,7 +12,7 @@ module.exports = {
 
     _.each(population, _.bind(function(item, index) {
 
-      var bucketSlots = Math.round(item.normalisedFitness * bucketSize);
+      var bucketSlots = Math.round(item.normalisedFitness * population.length);
 
       _.times(bucketSlots, _.bind(function() {
         this.bucket.push(index);

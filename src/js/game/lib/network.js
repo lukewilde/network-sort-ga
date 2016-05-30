@@ -13,9 +13,10 @@ function Network(config, game) {
 
   this.weighting = {
     size: 5,
-    area: 5000,
+    area: 25,
     lines: 300,
-    intersect: 1000
+    intersect: 1000,
+    outOfBounds: 30000,
   };
 }
 
@@ -80,17 +81,24 @@ Network.prototype.getFitness = function(doReporting) {
     // check if lines intersect with other nodes.
     var numberOfLinesIntersectingNodes = node.getNumberOfLineNodeIntersects() * this.weighting.intersect;
 
+    var outOfBounds = 0;
+
+    if (node.isOutOfBounds()) {
+      outOfBounds = 1 * this.weighting.outOfBounds;
+    }
+
     if (doReporting) {
       results.push({
         name: node.name,
         size: size,
         areaOfOverlappingNodes: areaOfOverlappingNodes,
         numberOfOverlappingLines: numberOfOverlappingLines,
+        outOfBounds: outOfBounds,
         numberOfLinesIntersectingNodes: numberOfLinesIntersectingNodes
       });
     }
 
-    fitness += size + areaOfOverlappingNodes + numberOfOverlappingLines + numberOfLinesIntersectingNodes;
+    fitness += size + outOfBounds + areaOfOverlappingNodes + numberOfOverlappingLines + numberOfLinesIntersectingNodes;
   }, this));
 
   if (doReporting) {
