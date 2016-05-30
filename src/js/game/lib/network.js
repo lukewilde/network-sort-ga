@@ -22,7 +22,13 @@ function Network(config, game) {
   _.each(this.nodes, _.bind(function (node) {
     node.setConnections(this.nodes);
   }, this));
+
+  this.genotype = this.getGenotype();
 }
+
+Network.prototype.reportFitness = function() {
+  return _.map(this.nodes, 'genotype');
+};
 
 Network.prototype.reportFitness = function() {
   this.getFitness(true);

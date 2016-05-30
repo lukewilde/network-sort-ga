@@ -33,7 +33,7 @@ function Node(config, mate, game) {
     this.y = Math.round(Math.random() * (properties.size.y - this.height));
   }
 
-  this.genotype = this.setGenotype();
+  this.genotype = this.getGenotype();
 
   this.centerX = this.x + (this.width / 2);
   this.centerY = this.y + (this.height / 2);
@@ -70,7 +70,7 @@ Node.prototype.getGene = function(gene) {
   return this[gene];
 };
 
-Node.prototype.setGenotype = function() {
+Node.prototype.getGenotype = function() {
   return JSON.stringify({
       name: this.name,
       x: this.x,
