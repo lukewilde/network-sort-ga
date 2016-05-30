@@ -8,8 +8,6 @@ module.exports = function(populationSize, game) {
 
   var fittest = sortByFitness(population).pop();
 
-  console.log('highest fitness for generation %s: %s (%s)', populationSize, fittest.fitness, fittest.genotype);
-
   return fittest;
 };
 

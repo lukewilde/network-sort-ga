@@ -1,9 +1,9 @@
 var game = {};
-var matingBucket = require('../lib/mating-bucket');
+var evolve = require('../lib/evolve');
 var populationSize = 100;
 
 game.create = function () {
-  var fittest = matingBucket(populationSize, this.game);
+  var fittest = evolve(populationSize, this.game);
 
   fittest.draw();
   fittest.reportFitness();
