@@ -13,7 +13,7 @@ function Network(config, game) {
 
   this.weighting = {
     size: 5,
-    area: 25,
+    area: 5000,
     lines: 300,
     intersect: 1000
   };
@@ -55,6 +55,10 @@ Network.prototype.getGenotype = function() {
 
 Network.prototype.reportFitness = function() {
   this.getFitness(true);
+};
+
+Network.prototype.showRealFitness = function() {
+  return this.worstPossibleScore - this.fitness;
 };
 
 Network.prototype.getFitness = function(doReporting) {
