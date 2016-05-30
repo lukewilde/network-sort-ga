@@ -10,6 +10,8 @@ var reported = false;
 
 game.create = function () {
   fittest = evolve.createInitialPopulation(populationSize, game);
+
+  console.error('Normalising the fitness is totally broken.');
 };
 
 game.update = function() {
