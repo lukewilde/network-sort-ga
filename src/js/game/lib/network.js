@@ -12,11 +12,11 @@ function Network(config, game) {
   this.intersectionWeighting = 10;
 
   this.weighting = {
-    size: 5,
-    area: 25,
-    lines: 300,
-    intersect: 1000,
-    outOfBounds: 30000,
+    size: 1,
+    area: 5,
+    lines: 60,
+    intersect: 200,
+    outOfBounds: 6000,
   };
 }
 

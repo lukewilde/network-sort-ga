@@ -8,8 +8,8 @@ function Node(config, mother, father, game) {
   this.game = game;
 
   this.mutationRate = 0.01;
-  this.approximationRate = 0.05;
-  this.maxApproxMagnitude = 0.1;
+  this.approximationRate = 0.5;
+  this.maxApproxMagnitude = 0.2;
 
   this.config = config;
 
