@@ -13,12 +13,13 @@ module.exports = {
 
     _.each(population, _.bind(function(item, index) {
 
-          var bucketSlots = Math.round(item.normalisedFitness * bucketSize);
+      var bucketSlots = Math.round(item.normalisedFitness * bucketSize);
 
-          _.times(bucketSlots, _.bind(function() {
-            this.bucket.push(index);
-          }, this));
-        }, this));
+      _.times(bucketSlots, _.bind(function() {
+        this.bucket.push(index);
+      }, this));
+
+    }, this));
   },
 
   getMate: function(item) {

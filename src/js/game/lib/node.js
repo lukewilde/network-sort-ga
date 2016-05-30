@@ -60,9 +60,9 @@ Node.prototype.inheritGene = function(gene, mother, father) {
   if (takeGeneFromMother) {
     return mother.getGene(gene);
   } else if (shouldMutateGene) {
-    return mother.getGene(gene) * _.random(0, this.maxMutationMagnitude);
-  } else {
     return father[gene];
+  } else {
+    return mother.getGene(gene) * _.random(0, this.maxMutationMagnitude);
   }
 };
 

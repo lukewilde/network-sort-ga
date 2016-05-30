@@ -2,43 +2,60 @@ var Network = require('./network');
 var matingBucket = require('./mating-bucket');
 var smallNetwork = require('../graphs/small');
 var _ = require('lodash');
-var partners = [];
-var population = [];
 
-module.exports = function(populationSize, maxGenerations, game) {
-  population = createInitialPopulation(populationSize, game);
+module.exports = {
+  fittest: null,
+  partners: [],
+  population: [],
+  populationSize: 0,
 
-  var fittest = null;
+  createInitialPopulation: function (populationSize, game) {
 
-  _.times(maxGenerations, function(index) {
+    this.populationSize = populationSize;
 
-    setNormalisedFitness(population);
+    _.times(populationSize, _.bind(function() {
+      var network = new Network(smallNetwork, game);
+      network.getFirstGeneration();
+      this.population.push(network);
+    }, this));
 
-    var fittestFromGeneration = sortByFitness(population).shift();
-    fittestFromGeneration.generation = index;
+    this.setNormalisedFitness();
 
-    console.log('generation %s: %s', index, fittestFromGeneration.fitness);
+    return this.sortByFitness().pop();
+  },
 
-    var isFirstGeneration = fittest === null;
+  nextGeneration: function(generationIndex) {
 
-    if (isFirstGeneration || fittest.fitness > fittestFromGeneration.fitness) {
-      fittest = fittestFromGeneration;
-    }
+    var fittestFromGeneration = this.sortByFitness().pop();
+    fittestFromGeneration.generation = generationIndex;
 
-    partners = [];
+    matingBucket.populate(this.population);
 
-    matingBucket.populate(population);
+    this.partners = [];
+    _.times(this.populationSize, _.bind(matchPartners, this));
 
-    _.times(populationSize, matchPartners);
-
-    population = _.map(partners, function(couple) {
+    this.population = _.map(this.partners, function(couple) {
       return couple[0].coinFlipMate(couple[1]);
     });
-  });
 
-  console.log('fittest dude ever', fittest.generation, fittest.fitness);
+    this.setNormalisedFitness();
 
-  return fittest;
+    return fittestFromGeneration;
+  },
+
+  setNormalisedFitness: function () {
+    var totalFitness = _.sumBy(this.population, 'fitness');
+    _.each(this.population, function(network) {
+      network.normalisedFitness = network.fitness / totalFitness;
+    });
+  },
+
+  sortByFitness: function () {
+    return _.sortBy(this.population, function(network) {
+      return network.fitness * -1;
+    });
+  }
+
 };
 
 function matchPartners () {
@@ -49,38 +66,5 @@ function matchPartners () {
     console.log(a, b);
   }
 
-  partners.push([a, b]);
-}
-
-function createInitialPopulation(populationSize, game) {
-
-  var population = [];
-
-  _.times(populationSize, function() {
-    var network = new Network(smallNetwork, game);
-    network.getFirstGeneration();
-    population.push(network);
-  });
-
-  return population;
-}
-
-function setNormalisedFitness(population) {
-  var totalFitness = getTotal(_.map(population, 'fitness'));
-  _.each(population, function(network) {
-    network.normalisedFitness = network.fitness / totalFitness;
-  });
-}
-
-function getTotal(values) {
-  var total = 0;
-  _.each(values, function(value) {
-    total += value;
-  });
-
-  return total;
-}
-
-function sortByFitness(population) {
-  return _.sortBy(population, 'fitness');
+  this.partners.push([a, b]);
 }
