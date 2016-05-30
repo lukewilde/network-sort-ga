@@ -59,9 +59,9 @@ function Node(config, mother, father, game) {
   ];
 }
 
-Node.prototype.inheritGene = function(gene, mother, father) {
+Node.prototype.inheritGene = function(gene, mother/*, father*/) {
   var shouldMutateGene = Math.random() > 1 - this.mutationRate;
-  var takeGeneFromMother = Math.random() > (0.5 - this.mutationRate / 2);
+  // var takeGeneFromMother = Math.random() > (0.5 - this.mutationRate / 2);
   var takeApproximateGene = Math.random() > 1 - this.approximationRate;
   var result;
 
@@ -69,11 +69,7 @@ Node.prototype.inheritGene = function(gene, mother, father) {
     return Math.round(Math.random() * this.max[gene]);
   }
 
-  if (takeGeneFromMother) {
-    result = mother[gene];
-  } else {
-    result = father[gene];
-  }
+  result = mother[gene];
 
   if (takeApproximateGene) {
     result *= _.random(1 - this.maxApproxMagnitude, 1 + this.maxApproxMagnitude);
