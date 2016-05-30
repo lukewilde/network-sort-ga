@@ -8,6 +8,7 @@ function Node(config, mate, game) {
   this.game = game;
 
   this.mutationRate = 0.001;
+  this.maxMutationMagnitude = 0.1;
 
   this.config = config;
 
@@ -25,12 +26,14 @@ function Node(config, mate, game) {
   this.numberOfConnections = 0;
 
   if (mate) {
-    this.x = this.getGene('x', mate);
-    this.y = this.getGene('y', mate);
+    this.x = this.inheritGene('x', mate);
+    this.y = this.inheritGene('y', mate);
   } else {
     this.x = Math.round(Math.random() * (properties.size.x - this.width));
     this.y = Math.round(Math.random() * (properties.size.y - this.height));
   }
+
+  this.genotype = this.setGenotype();
 
   this.centerX = this.x + (this.width / 2);
   this.centerY = this.y + (this.height / 2);
@@ -50,17 +53,29 @@ function Node(config, mate, game) {
   ];
 }
 
-Node.prototype.getGene = function(gene, mate) {
+Node.prototype.inheritGene = function(gene, mate) {
   var takeGeneFromMate = Math.random() > (0.5 - this.mutationRate / 2);
   var shouldMutateGene = Math.random() > 1 - this.mutationRate;
 
   if (takeGeneFromMate) {
-    return mate[gene];
+    return mate.getGene(gene);
   } else if (shouldMutateGene) {
-    return Math.round(Math.random() * (properties.size[gene] - this.width));
+    return this.getGene(gene) * _.random(0, this.maxMutationMagnitude);
   } else {
     return this[gene];
   }
+};
+
+Node.prototype.getGene = function(gene) {
+  return this[gene];
+};
+
+Node.prototype.setGenotype = function() {
+  return JSON.stringify({
+      name: this.name,
+      x: this.x,
+      y: this.y
+    });
 };
 
 Node.prototype.draw = function() {
