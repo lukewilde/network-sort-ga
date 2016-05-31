@@ -10,7 +10,6 @@ var reported = false;
 
 game.create = function () {
   fittest = evolve.createInitialPopulation(populationSize, game);
-  console.error('mating bucket populate is totally broken.');
 };
 
 game.update = function() {

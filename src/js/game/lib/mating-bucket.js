@@ -12,7 +12,7 @@ module.exports = {
 
     _.each(population, _.bind(function(item, index) {
 
-      var bucketSlots = Math.round(item.normalisedFitness * 100);
+      var bucketSlots = Math.round(item.normalisedFitness * (population.length * 100));
       _.times(bucketSlots, _.bind(function() {
         this.bucket.push(index);
       }, this));
