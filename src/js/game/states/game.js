@@ -1,7 +1,7 @@
 var game = {};
 var evolve = require('../lib/evolve');
 var populationSize = 100;
-var maxGenerations = 100;
+var maxGenerations = 200;
 var currentGeneration = 0;
 
 var fittest = null;

@@ -1,6 +1,7 @@
 var Network = require('./network');
 var matingBucket = require('./mating-bucket');
-var smallNetwork = require('../graphs/small');
+// var networkConfig = require('../graphs/small');
+var networkConfig = require('../graphs/large');
 var _ = require('lodash');
 
 module.exports = {
@@ -14,7 +15,7 @@ module.exports = {
     this.populationSize = populationSize;
 
     _.times(populationSize, _.bind(function() {
-      var network = new Network(smallNetwork, game);
+      var network = new Network(networkConfig, game);
       network.getFirstGeneration();
       this.population.push(network);
     }, this));
