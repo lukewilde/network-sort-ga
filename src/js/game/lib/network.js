@@ -5,7 +5,6 @@ function Network(config, game) {
   this.nodes = [];
   this.config = config;
   this.game = game;
-  this.worstPossibleScore = 1E8;
 
   this.sizeWeighting = 1;
 
@@ -58,10 +57,6 @@ Network.prototype.reportFitness = function() {
   this.getFitness(true);
 };
 
-Network.prototype.showRealFitness = function() {
-  return this.worstPossibleScore - this.fitness;
-};
-
 Network.prototype.getFitness = function(doReporting) {
 
   var fitness = 0;
@@ -105,7 +100,7 @@ Network.prototype.getFitness = function(doReporting) {
     console.table(results);
   }
 
-  return this.worstPossibleScore - fitness;
+  return fitness;
 };
 
 Network.prototype.draw = function() {

@@ -27,7 +27,7 @@ module.exports = {
   nextGeneration: function(generationIndex) {
 
     var fittestFromGeneration = this.sortByFitness().pop();
-    fittestFromGeneration.generation = generationIndex;
+    fittestFromGeneration.generation = generationIndex + 1;
 
     matingBucket.populate(this.population);
 
@@ -44,9 +44,16 @@ module.exports = {
   },
 
   setNormalisedFitness: function () {
-    var totalFitness = _.sumBy(this.population, 'fitness');
+
+    var max = this.sortByFitness().shift();
+
     _.each(this.population, function(network) {
-      network.normalisedFitness = network.fitness / totalFitness;
+      network.differenceFitness = max.fitness - network.fitness;
+    });
+
+    var totalFitness = _.sumBy(this.population, 'differenceFitness');
+    _.each(this.population, function(network) {
+      network.normalisedFitness = network.differenceFitness / totalFitness;
     });
   },
 

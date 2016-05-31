@@ -10,8 +10,7 @@ var reported = false;
 
 game.create = function () {
   fittest = evolve.createInitialPopulation(populationSize, game);
-
-  console.error('Normalising the fitness is totally broken.');
+  console.error('mating bucket populate is totally broken.');
 };
 
 game.update = function() {
@@ -20,7 +19,7 @@ game.update = function() {
 
   if (done && !reported) {
     fittest.reportFitness();
-    console.log(fittest.showRealFitness());
+    console.log('Winner: %s from generation', fittest.fitness, fittest.generation);
     reported = true;
     fittestFromGeneration = fittest;
     return;
@@ -33,9 +32,9 @@ game.update = function() {
     fittestFromGeneration = evolve.nextGeneration(currentGeneration);
     currentGeneration ++;
 
-    console.log('Generation %s: %s', currentGeneration, fittestFromGeneration.showRealFitness());
+    console.log('Generation %s: %s', currentGeneration, fittestFromGeneration.fitness);
 
-    if (fittest.normalisedFitness < fittestFromGeneration.normalisedFitness) {
+    if (fittest.fitness > fittestFromGeneration.fitness) {
       fittest = fittestFromGeneration;
     }
   }
