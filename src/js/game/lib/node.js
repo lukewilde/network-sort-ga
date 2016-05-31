@@ -43,7 +43,16 @@ function Node(config, mother, game) {
   this.centerX = this.x + (this.width / 2);
   this.centerY = this.y + (this.height / 2);
 
-  this.clipRect = new Phaser.Rectangle(this.x, this.y, this.width, this.height);
+  this.padding = 10;
+
+  var clip = {
+    x: this.x - this.padding,
+    y: this.y - this.padding,
+    width: this.width + this.padding * 2,
+    height: this.height + this.padding * 2
+  };
+
+  this.clipRect = new Phaser.Rectangle(clip.x, clip.y, clip.width, clip.height);
 
   var bottomLeft = this.clipRect.bottomLeft;
   var bottomRight = this.clipRect.bottomRight;
