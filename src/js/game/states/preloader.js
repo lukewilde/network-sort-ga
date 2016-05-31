@@ -1,10 +1,11 @@
 var preloader = {};
-
-preloader.preload = function () {
-};
+var _ = require('lodash');
 
 preloader.create = function () {
-  this.game.state.start('game');
+  window.google.charts.load('current', {'packages':['corechart']});
+  window.google.charts.setOnLoadCallback(_.bind(function() {
+    this.game.state.start('game');
+  }, this));
 };
 
 module.exports = preloader;

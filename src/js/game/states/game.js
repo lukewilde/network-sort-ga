@@ -1,7 +1,7 @@
 var game = {};
 var evolve = require('../lib/evolve');
 var populationSize = 100;
-var maxGenerations = 200;
+var maxGenerations = 100;
 var currentGeneration = 0;
 
 var fittest = null;
@@ -48,27 +48,31 @@ game.render = function() {
 };
 
 function showGraph() {
+  var data = window.google.visualization.arrayToDataTable(evolve.chartData);
 
-  window.google.charts.load('current', {'packages':['corechart']});
-  window.google.charts.setOnLoadCallback(drawChart);
+  var options = {
+    title: 'Generation vs. Fitness comparison',
+    hAxis: { title: 'Generation', minValue: 0, maxValue: maxGenerations },
+    vAxis: { title: 'Fitness', minValue: 0, maxValue: 50000 },
+    legend: 'none',
+    pointSize: 1,
+    trendlines: {
+      0: {
+        color: 'red',
+        opacity: 0.5,
+        degree: 3,
+        lineWidth: 5,
+        type: 'polynomial'
+      }
+    }
+  };
 
-  function drawChart() {
-    var data = window.google.visualization.arrayToDataTable(evolve.chartData);
+  var chartDiv = document.getElementById('chart-div');
+  chartDiv.style.display = 'block';
 
-    var options = {
-      title: 'Generation vs. Fitness comparison',
-      hAxis: { title: 'Generation', minValue: 0, maxValue: maxGenerations },
-      vAxis: { title: 'Fitness', minValue: 0, maxValue: 50000 },
-      legend: 'none'
-    };
+  var chart = new window.google.visualization.ScatterChart(chartDiv);
 
-    var chartDiv = document.getElementById('chart-div');
-    chartDiv.style.display = 'block';
-
-    var chart = new window.google.visualization.ScatterChart(chartDiv);
-
-    chart.draw(data, options);
-  }
+  chart.draw(data, options);
 }
 
 module.exports = game;
