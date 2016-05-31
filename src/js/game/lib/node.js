@@ -3,7 +3,7 @@ var _ = require('lodash');
 var calculateDistance = require('euclidean-distance');
 var md5 = require('md5');
 
-function Node(config, mother, father, game) {
+function Node(config, mother, game) {
 
   this.game = game;
 
@@ -31,9 +31,9 @@ function Node(config, mother, father, game) {
 
   this.numberOfConnections = 0;
 
-  if (mother && father) {
-    this.x = this.inheritGene('x', mother, father);
-    this.y = this.inheritGene('y', mother, father);
+  if (mother) {
+    this.x = this.inheritGene('x', mother);
+    this.y = this.inheritGene('y', mother);
   } else {
     this.x = Math.round(Math.random() * this.max.x);
     this.y = Math.round(Math.random() * this.max.y);
@@ -59,9 +59,8 @@ function Node(config, mother, father, game) {
   ];
 }
 
-Node.prototype.inheritGene = function(gene, mother/*, father*/) {
+Node.prototype.inheritGene = function(gene, mother) {
   var shouldMutateGene = Math.random() > 1 - this.mutationRate;
-  // var takeGeneFromMother = Math.random() > (0.5 - this.mutationRate / 2);
   var takeApproximateGene = Math.random() > 1 - this.approximationRate;
   var result;
 

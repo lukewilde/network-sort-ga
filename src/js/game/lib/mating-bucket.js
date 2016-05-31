@@ -19,21 +19,19 @@ module.exports = {
     }, this));
   },
 
-  getMate: function(item) {
-
+  getMate: function() {
     var mateIndex = _.sample(this.bucket);
-    var mate = this.population[mateIndex];
-
-    if (!item) {
-      return mate;
-    }
-
-    var itemIndex = _.indexOf(this.population, item);
-
-    do {
-      mateIndex = _.sample(this.bucket);
-    } while (itemIndex === mateIndex);
-
     return this.population[mateIndex];
+  },
+
+  getNewPopulation: function(population) {
+    this.populate(population);
+    var newPopulation = [];
+
+    _.each(this.population, _.bind(function() {
+      newPopulation.push(this.getMate());
+    }, this));
+
+    return newPopulation;
   }
 };

@@ -21,7 +21,7 @@ function Network(config, game) {
 
 Network.prototype.getFirstGeneration = function() {
   _.each(this.config, _.bind(function(nodeConfig) {
-    this.nodes.push(new Node(nodeConfig, null, null, this.game));
+    this.nodes.push(new Node(nodeConfig, null, this.game));
   }, this));
 
   this.connectNodes();
@@ -38,11 +38,11 @@ Network.prototype.connectNodes = function() {
   this.normalisedFitness = 0;
 };
 
-Network.prototype.coinFlipMate = function(mate) {
+Network.prototype.mutate = function() {
   var child = new Network(this.config, this.game);
 
-  _.each(this.nodes, _.bind(function(node, index) {
-    child.nodes.push(new Node(node.config, node, mate.nodes[index], this.game));
+  _.each(this.nodes, _.bind(function(node) {
+    child.nodes.push(new Node(node.config, node, this.game));
   }, this));
 
   child.connectNodes(child.nodes);

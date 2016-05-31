@@ -29,13 +29,10 @@ module.exports = {
     var fittestFromGeneration = this.sortByFitness().pop();
     fittestFromGeneration.generation = generationIndex + 1;
 
-    matingBucket.populate(this.population);
+    this.population = matingBucket.getNewPopulation(this.population);
 
-    this.partners = [];
-    _.times(this.populationSize, _.bind(matchPartners, this));
-
-    this.population = _.map(this.partners, function(couple) {
-      return couple[0].coinFlipMate(couple[1]);
+    this.population = _.map(this.population, function(network) {
+      return network.mutate();
     });
 
     this.setNormalisedFitness();
@@ -64,14 +61,3 @@ module.exports = {
   }
 
 };
-
-function matchPartners () {
-  var a = matingBucket.getMate();
-  var b = matingBucket.getMate(a);
-
-  if (!a || !b) {
-    console.log(a, b);
-  }
-
-  this.partners.push([a, b]);
-}
