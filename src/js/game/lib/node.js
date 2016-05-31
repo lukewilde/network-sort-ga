@@ -9,7 +9,6 @@ function Node(config, mother, game) {
 
   this.mutationRate = 0.01;
   this.approximationRate = 0.5;
-  this.maxApproxMagnitude = 0.2;
 
   this.config = config;
 
@@ -71,7 +70,7 @@ Node.prototype.inheritGene = function(gene, mother) {
   result = mother[gene];
 
   if (takeApproximateGene) {
-    result *= _.random(1 - this.maxApproxMagnitude, 1 + this.maxApproxMagnitude);
+    result += Math.round(_.random(-1, 1, true) * (this.max[gene] / 20));
   }
 
   return Math.round(result);
