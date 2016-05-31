@@ -1,5 +1,6 @@
 var game = {};
 var evolve = require('../lib/evolve');
+var reporting = require('../lib/reporting');
 var populationSize = 100;
 var maxGenerations = 100;
 var currentGeneration = 0;
@@ -21,7 +22,7 @@ game.update = function() {
     console.log('Winner: %s from generation', fittest.fitness, fittest.generation);
     reported = true;
     fittestFromGeneration = fittest;
-    showGraph();
+    reporting.showGraph(evolve.chartData, maxGenerations);
     return;
   } else if (done) {
     return;
@@ -46,33 +47,5 @@ game.render = function() {
   game.world.removeAll();
   fittestFromGeneration.draw();
 };
-
-function showGraph() {
-  var data = window.google.visualization.arrayToDataTable(evolve.chartData);
-
-  var options = {
-    title: 'Generation vs. Fitness comparison',
-    hAxis: { title: 'Generation', minValue: 0, maxValue: maxGenerations },
-    vAxis: { title: 'Fitness', minValue: 0, maxValue: 50000 },
-    legend: 'none',
-    pointSize: 1,
-    trendlines: {
-      0: {
-        color: 'red',
-        opacity: 0.5,
-        degree: 3,
-        lineWidth: 5,
-        type: 'polynomial'
-      }
-    }
-  };
-
-  var chartDiv = document.getElementById('chart-div');
-  chartDiv.style.display = 'block';
-
-  var chart = new window.google.visualization.ScatterChart(chartDiv);
-
-  chart.draw(data, options);
-}
 
 module.exports = game;
