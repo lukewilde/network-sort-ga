@@ -1,8 +1,8 @@
 var game = {};
 var evolution = require('../lib/evolution');
 var reporting = require('../lib/reporting');
-var populationSize = 100;
-var maxGenerations = 100;
+var populationSize = 50;
+var maxGenerations = 1000;
 var currentGeneration = 0;
 
 var fittest = null;
