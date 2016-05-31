@@ -255,6 +255,4 @@ Node.prototype.drawBox = function() {
   this.game.add.text(x, y, this.name, style);
 };
 
-
-
 module.exports = Node;
