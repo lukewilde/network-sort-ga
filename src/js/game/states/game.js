@@ -1,5 +1,5 @@
 var game = {};
-var evolve = require('../lib/evolve');
+var evolution = require('../lib/evolution');
 var reporting = require('../lib/reporting');
 var populationSize = 100;
 var maxGenerations = 100;
@@ -10,7 +10,7 @@ var fittestFromGeneration = null;
 var reported = false;
 
 game.create = function () {
-  fittest = evolve.createInitialPopulation(populationSize, game);
+  fittest = evolution.createInitialPopulation(populationSize, game);
 };
 
 game.update = function() {
@@ -22,7 +22,7 @@ game.update = function() {
     console.log('Winner: %s from generation', fittest.fitness, fittest.generation);
     reported = true;
     fittestFromGeneration = fittest;
-    reporting.showGraph(evolve.chartData, maxGenerations);
+    reporting.showGraph(evolution.chartData, maxGenerations);
     return;
   } else if (done) {
     return;
@@ -30,7 +30,7 @@ game.update = function() {
 
   if (!done) {
 
-    fittestFromGeneration = evolve.nextGeneration(currentGeneration);
+    fittestFromGeneration = evolution.nextGeneration(currentGeneration);
     currentGeneration ++;
 
     console.log('Generation %s: %s', currentGeneration, fittestFromGeneration.fitness);
