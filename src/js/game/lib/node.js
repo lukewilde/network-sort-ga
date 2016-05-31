@@ -30,13 +30,7 @@ function Node(config, mother, game) {
 
   this.numberOfConnections = 0;
 
-  if (mother) {
-    this.x = this.inheritGene('x', mother);
-    this.y = this.inheritGene('y', mother);
-  } else {
-    this.x = Math.round(Math.random() * this.max.x);
-    this.y = Math.round(Math.random() * this.max.y);
-  }
+  this.birthGenotype(mother);
 
   this.genotype = this.getGenotype();
 
@@ -45,27 +39,44 @@ function Node(config, mother, game) {
 
   this.padding = 10;
 
-  var clip = {
+  this.clipRect = this.getClipRect();
+  this.edges = this.getEdges();
+}
+
+Node.prototype.birthGenotype = function(mother) {
+  if (mother) {
+    this.x = this.inheritGene('x', mother);
+    this.y = this.inheritGene('y', mother);
+  } else {
+    this.x = Math.round(Math.random() * this.max.x);
+    this.y = Math.round(Math.random() * this.max.y);
+  }
+};
+
+Node.prototype.getEdges = function() {
+  var bottomLeft = this.clipRect.bottomLeft;
+  var bottomRight = this.clipRect.bottomRight;
+  var topRight = this.clipRect.topRight;
+  var topLeft = this.clipRect.topLeft;
+
+  return [
+    new Phaser.Line(bottomLeft.x, bottomLeft.y, topLeft.x, topLeft.y),
+    new Phaser.Line(topLeft.x, topLeft.y, topRight.x, topRight.y),
+    new Phaser.Line(topRight.x, topRight.y, bottomRight.x, bottomRight.y),
+    new Phaser.Line(bottomRight.x, bottomRight.y, bottomLeft.x, bottomLeft.y),
+  ];
+};
+
+Node.prototype.getClipRect = function() {
+    var clip = {
     x: this.x - this.padding,
     y: this.y - this.padding,
     width: this.width + this.padding * 2,
     height: this.height + this.padding * 2
   };
 
-  this.clipRect = new Phaser.Rectangle(clip.x, clip.y, clip.width, clip.height);
-
-  var bottomLeft = this.clipRect.bottomLeft;
-  var bottomRight = this.clipRect.bottomRight;
-  var topRight = this.clipRect.topRight;
-  var topLeft = this.clipRect.topLeft;
-
-  this.edges = [
-    new Phaser.Line(bottomLeft.x, bottomLeft.y, topLeft.x, topLeft.y),
-    new Phaser.Line(topLeft.x, topLeft.y, topRight.x, topRight.y),
-    new Phaser.Line(topRight.x, topRight.y, bottomRight.x, bottomRight.y),
-    new Phaser.Line(bottomRight.x, bottomRight.y, bottomLeft.x, bottomLeft.y),
-  ];
-}
+  return new Phaser.Rectangle(clip.x, clip.y, clip.width, clip.height);
+};
 
 Node.prototype.inheritGene = function(gene, mother) {
   var shouldMutateGene = Math.random() > 1 - this.mutationRate;
