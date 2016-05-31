@@ -56,9 +56,9 @@ function showGraph() {
     var data = window.google.visualization.arrayToDataTable(evolve.chartData);
 
     var options = {
-      title: 'Age vs. Weight comparison',
-      hAxis: {title: 'Age', minValue: 0, maxValue: 15},
-      vAxis: {title: 'Weight', minValue: 0, maxValue: 15},
+      title: 'Generation vs. Fitness comparison',
+      hAxis: { title: 'Generation', minValue: 0, maxValue: maxGenerations },
+      vAxis: { title: 'Fitness', minValue: 0, maxValue: 50000 },
       legend: 'none'
     };
 
