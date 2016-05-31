@@ -12,11 +12,13 @@ module.exports = {
 
     _.each(population, _.bind(function(item, index) {
 
-      var bucketSlots = Math.round(item.normalisedFitness * (population.length * 100));
+      var bucketSlots = Math.round(item.normalisedFitness * (population.length * 1000));
       _.times(bucketSlots, _.bind(function() {
         this.bucket.push(index);
       }, this));
     }, this));
+
+    this.bucket = _.slice(this.bucket, this.bucket.length / 1.5, this.bucket.length);
   },
 
   getMate: function() {

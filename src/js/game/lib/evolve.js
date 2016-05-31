@@ -29,7 +29,7 @@ module.exports = {
     var fittestFromGeneration = this.sortByFitness().pop();
     fittestFromGeneration.generation = generationIndex + 1;
 
-    this.population = matingBucket.getNewPopulation(this.population);
+    this.population = matingBucket.getNewPopulation(this.sortByFitness());
 
     this.population = _.map(this.population, function(network) {
       return network.mutate();
