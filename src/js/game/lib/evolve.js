@@ -9,6 +9,7 @@ module.exports = {
   partners: [],
   population: [],
   populationSize: 0,
+  chartData: [['Generation', 'Fitness']],
 
   createInitialPopulation: function (populationSize, game) {
 
@@ -21,6 +22,7 @@ module.exports = {
     }, this));
 
     this.setNormalisedFitness();
+    this.addToChartData(0);
 
     return this.sortByFitness().pop();
   },
@@ -37,6 +39,7 @@ module.exports = {
     });
 
     this.setNormalisedFitness();
+    this.addToChartData(generationIndex);
 
     return fittestFromGeneration;
   },
@@ -53,6 +56,12 @@ module.exports = {
     _.each(this.population, function(network) {
       network.normalisedFitness = network.differenceFitness / totalFitness;
     });
+  },
+
+  addToChartData: function(generation) {
+    _.each(this.population, _.bind(function(network) {
+      this.chartData.push([generation, network.fitness]);
+    }, this));
   },
 
   sortByFitness: function () {
