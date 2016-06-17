@@ -1,6 +1,7 @@
 var game = {};
 var evolution = require('../lib/evolution');
 var reporting = require('../lib/reporting');
+var properties = require('../properties');
 var populationSize = 50;
 var maxGenerations = 1000;
 var currentGeneration = 0;
@@ -73,7 +74,9 @@ function report() {
   fittest.reportFitness();
   console.log('Winner: %s from generation %s', fittest.fitness, fittest.generation);
   networkToRender = fittest;
-  reporting.showGraph(evolution.chartData, maxGenerations);
+  if (!properties.disableCharts) {
+    reporting.showGraph(evolution.chartData, maxGenerations);
+  }
   currentState = DISPLAY_FITTEST;
 }
 
