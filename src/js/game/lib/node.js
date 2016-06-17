@@ -15,12 +15,14 @@ function Node(config, mother, game) {
   this.name = config.name;
   this.connections = config.connections;
 
-  this.width = 160;
-  this.height = 120;
+  this.size = {
+    x: 80,
+    y: 60
+  };
 
   this.max ={
-    x: properties.size.x - this.width,
-    y: properties.size.y - this.height
+    x: properties.size.x - this.size.x,
+    y: properties.size.y - this.size.y
   };
 
   var hash = md5(this.name).substring(0, 6);
@@ -34,8 +36,8 @@ function Node(config, mother, game) {
 
   this.genotype = this.getGenotype();
 
-  this.centerX = this.x + (this.width / 2);
-  this.centerY = this.y + (this.height / 2);
+  this.centerX = this.x + (this.size.x / 2);
+  this.centerY = this.y + (this.size.y / 2);
 
   this.padding = 10;
 
@@ -71,8 +73,8 @@ Node.prototype.getClipRect = function() {
     var clip = {
     x: this.x - this.padding,
     y: this.y - this.padding,
-    width: this.width + this.padding * 2,
-    height: this.height + this.padding * 2
+    width: this.size.x + this.padding * 2,
+    height: this.size.y + this.padding * 2
   };
 
   return new Phaser.Rectangle(clip.x, clip.y, clip.width, clip.height);
@@ -90,7 +92,7 @@ Node.prototype.inheritGene = function(gene, mother) {
   result = mother[gene];
 
   if (takeApproximateGene) {
-    result += Math.round(_.random(-1, 1, true) * (this.max[gene] / 20));
+    result += Math.round(_.random(-1, 1, true) * this.size[gene] / 2);
   }
 
   return Math.round(result);
@@ -237,7 +239,7 @@ Node.prototype.drawBox = function() {
   var graphics = this.game.add.graphics(0, 0);
 
   graphics.beginFill(this.colour);
-  graphics.drawRect(this.x, this.y, this.width, this.height);
+  graphics.drawRect(this.x, this.y, this.size.x, this.size.y);
 
   var fontSize = 52;
 
@@ -245,12 +247,12 @@ Node.prototype.drawBox = function() {
     font: fontSize + 'px Arial',
     fill: 'black',
     wordWrap: true,
-    wordWrapWidth: this.width,
+    wordWrapWidth: this.size.x,
     align: 'center',
   };
 
-  var x = this.x + this.width / 1.78 - (fontSize / 2);
-  var y = this.y + this.height / 2 - (fontSize / 2);
+  var x = this.x + this.size.x / 1.78 - (fontSize / 2);
+  var y = this.y + this.size.y / 2 - (fontSize / 2);
 
   this.game.add.text(x, y, this.name, style);
 };
