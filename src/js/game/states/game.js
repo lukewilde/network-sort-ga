@@ -11,6 +11,7 @@ var networkToRender = null;
 var EVOLVING = 0;
 var REPORTING = 1;
 var DONE = 2;
+var DISPLAY_FITTEST = 3;
 
 var currentState = EVOLVING;
 
@@ -26,6 +27,8 @@ game.update = function() {
   case REPORTING:
     report();
     break;
+  case DISPLAY_FITTEST:
+    break;
   case DONE:
     break;
   default:
@@ -34,9 +37,16 @@ game.update = function() {
 };
 
 game.render = function() {
+  if (currentState === DONE) {
+    return;
+  }
   // Destroy all old graphics.
   game.world.removeAll();
   networkToRender.draw();
+
+  if (currentState === DISPLAY_FITTEST) {
+    currentState = DONE;
+  }
 };
 
 function createNextGeneration() {
@@ -64,7 +74,7 @@ function report() {
   console.log('Winner: %s from generation %s', fittest.fitness, fittest.generation);
   networkToRender = fittest;
   reporting.showGraph(evolution.chartData, maxGenerations);
-  currentState = DONE;
+  currentState = DISPLAY_FITTEST;
 }
 
 module.exports = game;
