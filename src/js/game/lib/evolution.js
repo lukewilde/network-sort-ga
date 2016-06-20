@@ -21,17 +21,17 @@ module.exports = {
       this.population.push(network);
     }, this));
 
-    // this.setNormalisedFitness();
-    this.addToChartData(0);
+    var fittest = _.first(this.sortByFitness());
+    this.addToChartData(0, fittest);
 
-    return _.first(this.sortByFitness());
+    return fittest;
   },
 
   nextGeneration: function(generationIndex) {
 
-    var fittestFromGeneration = _.first(this.sortByFitness());
+    var fittest = _.first(this.sortByFitness());
 
-    fittestFromGeneration.generation = generationIndex + 1;
+    fittest.generation = generationIndex + 1;
 
     this.population = matingBucket.getNewPopulation(this.sortByFitness());
 
@@ -39,30 +39,13 @@ module.exports = {
       return network.mutate();
     });
 
-    // this.setNormalisedFitness();
-    this.addToChartData(generationIndex);
+    this.addToChartData(generationIndex, fittest);
 
-    return fittestFromGeneration;
+    return fittest;
   },
 
-  setNormalisedFitness: function () {
-
-    var max = this.sortByFitness().shift();
-
-    _.each(this.population, function(network) {
-      network.differenceFitness = max.fitness - network.fitness;
-    });
-
-    var totalFitness = _.sumBy(this.population, 'differenceFitness');
-    _.each(this.population, function(network) {
-      network.normalisedFitness = network.differenceFitness / totalFitness;
-    });
-  },
-
-  addToChartData: function(generation) {
-    _.each(this.population, _.bind(function(network) {
-      this.chartData.push([generation, network.fitness]);
-    }, this));
+  addToChartData: function(generation, fittestNetwork) {
+    this.chartData.push([generation, fittestNetwork.fitness]);
   },
 
   sortByFitness: function () {
