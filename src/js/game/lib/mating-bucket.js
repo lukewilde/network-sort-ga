@@ -10,7 +10,6 @@ module.exports = {
 
     this.population = population;
 
-
     _.each(population, _.bind(function(item, index) {
 
       // By working out the difference from the mean, we can exaggerate the normalised fitness.

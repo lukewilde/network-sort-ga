@@ -21,15 +21,15 @@ module.exports = {
       this.population.push(network);
     }, this));
 
-    this.setNormalisedFitness();
+    // this.setNormalisedFitness();
     this.addToChartData(0);
 
-    return this.sortByFitness().pop();
+    return _.last(this.sortByFitness());
   },
 
   nextGeneration: function(generationIndex) {
 
-    var fittestFromGeneration = this.sortByFitness().pop();
+    var fittestFromGeneration = _.last(this.sortByFitness());
     fittestFromGeneration.generation = generationIndex + 1;
 
     this.population = matingBucket.getNewPopulation(this.sortByFitness());
@@ -38,7 +38,7 @@ module.exports = {
       return network.mutate();
     });
 
-    this.setNormalisedFitness();
+    // this.setNormalisedFitness();
     this.addToChartData(generationIndex);
 
     return fittestFromGeneration;
