@@ -1,5 +1,5 @@
 var _ = require('lodash');
-var Node = require('./Node');
+var Item = require('./item');
 
 function Network(config, game) {
   this.nodes = [];
@@ -12,16 +12,16 @@ function Network(config, game) {
 
   this.weighting = {
     size: 1,
-    area: 10,
-    lines: 60,
-    intersect: 200,
-    outOfBounds: 6000,
+    area: 5,
+    lines: 30,
+    intersect: 100,
+    outOfBounds: 3000,
   };
 }
 
 Network.prototype.getFirstGeneration = function() {
   _.each(this.config, _.bind(function(nodeConfig) {
-    this.nodes.push(new Node(nodeConfig, null, this.game));
+    this.nodes.push(new Item(nodeConfig, null, this.game));
   }, this));
 
   this.connectNodes();
@@ -42,7 +42,7 @@ Network.prototype.mutate = function() {
   var child = new Network(this.config, this.game);
 
   _.each(this.nodes, _.bind(function(node) {
-    child.nodes.push(new Node(node.config, node, this.game));
+    child.nodes.push(new Item(node.config, node, this.game));
   }, this));
 
   child.connectNodes(child.nodes);
