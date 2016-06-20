@@ -1,7 +1,7 @@
 var Network = require('./network');
 var matingBucket = require('./mating-bucket');
-// var networkConfig = require('../graphs/small');
-var networkConfig = require('../graphs/large');
+var networkConfig = require('../graphs/small');
+// var networkConfig = require('../graphs/large');
 var _ = require('lodash');
 
 module.exports = {

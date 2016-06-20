@@ -10,15 +10,19 @@ module.exports = {
 
     this.population = population;
 
+
     _.each(population, _.bind(function(item, index) {
 
-      var bucketSlots = Math.round(item.normalisedFitness * (population.length * 1000));
+      // By working out the difference from the mean, we can exaggerate the normalised fitness.
+      // This widens the gap between high and low value networks.
+      var mean = _.mean(_.map(population, 'normalisedFitness'));
+      var exaggeratedFitness = item.normalisedFitness * ((item.normalisedFitness - mean) + 1);
+      var bucketSlots = Math.round(exaggeratedFitness * (population.length * 100));
+
       _.times(bucketSlots, _.bind(function() {
         this.bucket.push(index);
       }, this));
     }, this));
-
-    this.bucket = _.slice(this.bucket, this.bucket.length / 1.5, this.bucket.length);
   },
 
   getMate: function() {

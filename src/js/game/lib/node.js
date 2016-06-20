@@ -8,7 +8,7 @@ function Node(config, mother, game) {
   this.game = game;
 
   this.mutationRate = 0.01;
-  this.approximationRate = 0.5;
+  this.approximationRate = 0.1;
 
   this.config = config;
 
@@ -92,7 +92,7 @@ Node.prototype.inheritGene = function(gene, mother) {
   result = mother[gene];
 
   if (takeApproximateGene) {
-    result += Math.round(_.random(-1, 1, true) * this.size[gene] / 2);
+    result += Math.round(_.random(-1, 1, true) * this.size[gene] / 3);
   }
 
   return Math.round(result);
@@ -241,7 +241,7 @@ Node.prototype.drawBox = function() {
   graphics.beginFill(this.colour);
   graphics.drawRect(this.x, this.y, this.size.x, this.size.y);
 
-  var fontSize = 52;
+  var fontSize = this.size.x / 2;
 
   var style = {
     font: fontSize + 'px Arial',
