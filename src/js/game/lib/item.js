@@ -9,7 +9,7 @@ function Node(config, mother, game) {
 
   this.mutationRate = 0.01;
   this.approximationRate = 0.1;
-  this.mutationRatio = 3;
+  this.mutationRatio = 1;
 
   this.config = config;
 
@@ -34,6 +34,12 @@ function Node(config, mother, game) {
   this.numberOfConnections = 0;
 
   this.birthGenotype(mother);
+  this.setPosition(this.x, this.y);
+}
+
+Node.prototype.setPosition = function(x, y) {
+  this.x = x;
+  this.y = y;
 
   this.genotype = this.getGenotype();
 
@@ -44,7 +50,7 @@ function Node(config, mother, game) {
 
   this.clipRect = this.getClipRect();
   this.edges = this.getEdges();
-}
+};
 
 Node.prototype.birthGenotype = function(mother) {
   if (mother) {
@@ -82,8 +88,8 @@ Node.prototype.getClipRect = function() {
 };
 
 Node.prototype.inheritGene = function(gene, mother) {
-  var shouldMutateGene = Math.random() > 1 - this.mutationRate;
-  var takeApproximateGene = Math.random() > 1 - this.approximationRate;
+  var shouldMutateGene = Math.random() < this.mutationRate;
+  var takeApproximateGene = Math.random() < this.approximationRate;
   var result;
 
   if (shouldMutateGene) {

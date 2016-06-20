@@ -6,16 +6,18 @@ function Network(config, game) {
   this.config = config;
   this.game = game;
 
+  this.swapChance = 0.005;
+
   this.sizeWeighting = 1;
 
   this.intersectionWeighting = 10;
 
   this.weighting = {
     size: 1,
-    area: 5,
-    lines: 30,
-    intersect: 100,
-    outOfBounds: 3000,
+    area: 10,
+    lines: 60,
+    intersect: 200,
+    outOfBounds: 6000,
   };
 }
 
@@ -45,8 +47,27 @@ Network.prototype.mutate = function() {
     child.nodes.push(new Item(node.config, node, this.game));
   }, this));
 
+  this.swapSomeNodes();
+
   child.connectNodes(child.nodes);
   return child;
+};
+
+Network.prototype.swapSomeNodes = function() {
+
+  if (Math.random() < this.swapChance) {
+    var a = _.sample(this.nodes);
+    var b = _.sample(this.nodes);
+
+    var tempPosition = {
+      x: b.x,
+      y: b.y
+    };
+
+    b.setPosition(a.x, a.y);
+    a.setPosition(tempPosition.x, tempPosition.y);
+  }
+
 };
 
 Network.prototype.getGenotype = function() {
