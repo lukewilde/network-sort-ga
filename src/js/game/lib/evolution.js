@@ -24,12 +24,13 @@ module.exports = {
     // this.setNormalisedFitness();
     this.addToChartData(0);
 
-    return _.last(this.sortByFitness());
+    return _.first(this.sortByFitness());
   },
 
   nextGeneration: function(generationIndex) {
 
-    var fittestFromGeneration = _.last(this.sortByFitness());
+    var fittestFromGeneration = _.first(this.sortByFitness());
+
     fittestFromGeneration.generation = generationIndex + 1;
 
     this.population = matingBucket.getNewPopulation(this.sortByFitness());
@@ -66,7 +67,7 @@ module.exports = {
 
   sortByFitness: function () {
     return _.sortBy(this.population, function(network) {
-      return network.fitness * -1;
+      return network.fitness;
     });
   }
 
