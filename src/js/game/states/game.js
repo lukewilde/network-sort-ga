@@ -2,7 +2,7 @@ var game = {};
 var evolution = require('../lib/evolution');
 var reporting = require('../lib/reporting');
 var properties = require('../properties');
-var populationSize = 10;
+var populationSize = 50;
 var maxGenerations = 1000;
 var currentGeneration = 0;
 
