@@ -6,11 +6,8 @@ function Network(config, game) {
   this.config = config;
   this.game = game;
 
-  this.swapChance = 0.005;
-
-  this.sizeWeighting = 1;
-
-  this.intersectionWeighting = 10;
+  // This means about 10% - 20% of the population will incur a node swap.
+  this.swapChance = 2 / config.length;
 
   this.weighting = {
     size: 1,
@@ -35,9 +32,7 @@ Network.prototype.connectNodes = function() {
   }, this));
 
   this.genotype = this.getGenotype();
-
   this.fitness = this.getFitness();
-  this.normalisedFitness = 0;
 };
 
 Network.prototype.mutate = function() {
@@ -47,7 +42,7 @@ Network.prototype.mutate = function() {
     child.nodes.push(new Item(node.config, node, this.game));
   }, this));
 
-  this.swapSomeNodes();
+  child.swapSomeNodes();
 
   child.connectNodes(child.nodes);
   return child;
