@@ -1,7 +1,7 @@
 var _ = require('lodash');
 var Item = require('./item');
 
-function Network(config, game) {
+function Network(config, game, ignoreSize) {
   this.nodes = [];
   this.config = config;
   this.game = game;
@@ -12,10 +12,14 @@ function Network(config, game) {
   this.weighting = {
     size: 1,
     area: 10,
-    lines: 60,
+    lines: 100,
     intersect: 200,
     outOfBounds: 6000,
   };
+
+  if (ignoreSize) {
+    this.weighting.size = 0;
+  }
 }
 
 Network.prototype.getFirstGeneration = function() {
