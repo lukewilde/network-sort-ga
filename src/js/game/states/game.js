@@ -2,24 +2,30 @@ var game = {};
 var evolution = require('../lib/evolution');
 var reporting = require('../lib/reporting');
 var properties = require('../properties');
+var _ = require('lodash');
 var populationSize = 100;
 var maxChaoticGenerations = 10;
 var numChaoticIterations = 30;
+var currentChaoticIterations = 0;
 var maxPackingGenerations = 1000;
 var maxGenerations = 0;
 var currentGeneration = 0;
+
+var chaosFittest = [];
 
 var fittest = null;
 var networkToRender = null;
 
 var CHAOTIC_EVOLUTION = 0;
-var SELECTING = 1;
-var PACKING = 2;
-var EVOLVING = 3;
-var REPORTING = 4;
-var DONE = 5;
-var DISPLAY_FITTEST = 6;
+var TRACK_FITTEST_FROM_CHAOS = 1;
+var SELECTING = 2;
+var PACKING = 3;
+var EVOLVING = 4;
+var REPORTING = 5;
+var DONE = 6;
+var DISPLAY_FITTEST = 7;
 
+var nextState = null;
 var currentState = CHAOTIC_EVOLUTION;
 
 game.update = function() {
@@ -27,8 +33,11 @@ game.update = function() {
   case CHAOTIC_EVOLUTION:
     evolveWithChaos();
     break;
+  case TRACK_FITTEST_FROM_CHAOS:
+    trackFittestFromChaos();
+    break;
   case SELECTING:
-    chooseFittestFromAllGenerations();
+    chooseFittestFromAllChaos();
     break;
   case PACKING:
     pack();
@@ -62,9 +71,28 @@ game.render = function() {
 };
 
 function evolveWithChaos() {
+
+  if (numChaoticIterations >= currentChaoticIterations) {
+    currentState = SELECTING;
+    return;
+  }
+
+  currentChaoticIterations ++;
+
   fittest = evolution.createInitialPopulation(populationSize, game, true);
   currentState = EVOLVING;
+  nextState = TRACK_FITTEST_FROM_CHAOS;
   maxGenerations = maxChaoticGenerations;
+}
+
+function trackFittestFromChaos() {
+  chaosFittest.push(fittest);
+  currentState = CHAOTIC_EVOLUTION;
+}
+
+function chooseFittestFromAllChaos() {
+  fittest = _.first(_.sortBy(chaosFittest, 'fitness'));
+  currentState = REPORTING;
 }
 
 function createNextGeneration() {
@@ -83,7 +111,7 @@ function checkIfMaxGenerations() {
   currentGeneration ++;
 
   if (currentGeneration >= maxGenerations) {
-    currentState = REPORTING;
+    currentState = nextState;
   }
 }
 
