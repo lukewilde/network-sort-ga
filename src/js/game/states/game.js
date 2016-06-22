@@ -72,20 +72,26 @@ game.render = function() {
 
 function evolveWithChaos() {
 
-  if (numChaoticIterations >= currentChaoticIterations) {
+  if (numChaoticIterations < currentChaoticIterations) {
     currentState = SELECTING;
     return;
   }
 
+  currentGeneration = 0;
   currentChaoticIterations ++;
 
   fittest = evolution.createInitialPopulation(populationSize, game, true);
+
+  // Priming the first render.
+  networkToRender = fittest;
+
   currentState = EVOLVING;
   nextState = TRACK_FITTEST_FROM_CHAOS;
   maxGenerations = maxChaoticGenerations;
 }
 
 function trackFittestFromChaos() {
+  console.log('Overall winner from %s:%s:%s', currentChaoticIterations, fittest.generation, fittest.fitness);
   chaosFittest.push(fittest);
   currentState = CHAOTIC_EVOLUTION;
 }
@@ -98,11 +104,11 @@ function chooseFittestFromAllChaos() {
 function createNextGeneration() {
   networkToRender = evolution.nextGeneration(currentGeneration);
 
-  console.log('Generation %s: %s', currentGeneration, networkToRender.fitness);
-
   if (fittest.fitness > networkToRender.fitness) {
     fittest = networkToRender;
   }
+
+  // console.log('%s:%s', fittest.generation, fittest.fitness);
 
   checkIfMaxGenerations();
 }
