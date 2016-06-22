@@ -3,12 +3,15 @@ var evolution = require('../lib/evolution');
 var reporting = require('../lib/reporting');
 var properties = require('../properties');
 var _ = require('lodash');
-var populationSize = 10;
-var maxChaoticGenerations = 10;
+
+var populationSize = 100;
 var numChaoticIterations = 10;
-var currentChaoticIterations = 0;
+
+var maxChaoticGenerations = 30;
 var maxPackingGenerations = 1000;
 var maxGenerations = 0;
+
+var currentChaoticIterations = 0;
 var currentGeneration = 0;
 
 var chaosFittest = [];
