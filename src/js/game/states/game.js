@@ -19,11 +19,10 @@ var networkToRender = null;
 var CHAOTIC_EVOLUTION = 0;
 var TRACK_FITTEST_FROM_CHAOS = 1;
 var SELECTING = 2;
-var PACKING = 3;
-var EVOLVING = 4;
-var REPORTING = 5;
-var DONE = 6;
-var DISPLAY_FITTEST = 7;
+var EVOLVING = 3;
+var REPORTING = 4;
+var DONE = 5;
+var DISPLAY_FITTEST = 6;
 
 var nextState = null;
 var currentState = CHAOTIC_EVOLUTION;
@@ -38,9 +37,6 @@ game.update = function() {
     break;
   case SELECTING:
     chooseFittestFromAllChaos();
-    break;
-  case PACKING:
-    pack();
     break;
   case EVOLVING:
     createNextGeneration();
