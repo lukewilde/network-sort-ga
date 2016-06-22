@@ -5,6 +5,7 @@ function Network(config, game, ignoreSize) {
   this.nodes = [];
   this.config = config;
   this.game = game;
+  this.ignoreSize = ignoreSize;
 
   // This means about 10% - 20% of the population will incur a node swap.
   this.swapChance = 2 / config.length;
@@ -40,7 +41,7 @@ Network.prototype.connectNodes = function() {
 };
 
 Network.prototype.mutate = function() {
-  var child = new Network(this.config, this.game);
+  var child = new Network(this.config, this.game, this.ignoreSize);
 
   _.each(this.nodes, _.bind(function(node) {
     child.nodes.push(new Item(node.config, node, this.game));

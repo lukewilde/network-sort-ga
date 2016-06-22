@@ -13,6 +13,7 @@ module.exports = {
 
   createInitialPopulation: function (populationSize, game, ignoreSize) {
     this.populationSize = populationSize;
+    this.population = [];
 
     _.times(populationSize, _.bind(function() {
       var network = new Network(networkConfig, game, ignoreSize);
@@ -29,11 +30,12 @@ module.exports = {
 
   nextGeneration: function(generationIndex) {
 
-    var fittest = _.first(this.sortByFitness());
+    var generation = this.sortByFitness();
+    var fittest = _.first(generation);
 
     fittest.generation = generationIndex + 1;
 
-    this.population = matingBucket.getNewPopulation(this.sortByFitness());
+    this.population = matingBucket.getNewPopulation(generation);
 
     this.population = _.map(this.population, function(network) {
       return network.mutate();
