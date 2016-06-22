@@ -1,7 +1,7 @@
 var Network = require('./network');
 var matingBucket = require('./mating-bucket');
-// var networkConfig = require('../graphs/small');
-var networkConfig = require('../graphs/large');
+var networkConfig = require('../graphs/small');
+// var networkConfig = require('../graphs/large');
 var _ = require('lodash');
 
 module.exports = {
@@ -20,6 +20,22 @@ module.exports = {
 
       network.getFirstGeneration();
       this.population.push(network);
+    }, this));
+
+    var fittest = _.first(this.sortByFitness());
+    this.addToChartData(0, fittest);
+
+    return fittest;
+  },
+
+  createPopulationFromIndividual: function(network) {
+    this.population = [];
+    network.ignoreSize = false;
+
+    _.times(this.populationSize, _.bind(function() {
+      var childNetwork = network.mutate();
+
+      this.population.push(childNetwork);
     }, this));
 
     var fittest = _.first(this.sortByFitness());

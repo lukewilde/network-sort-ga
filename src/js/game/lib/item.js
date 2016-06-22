@@ -21,7 +21,7 @@ function Node(config, mother, game) {
     y: 60
   };
 
-  this.max ={
+  this.max = {
     x: properties.size.x - this.size.x,
     y: properties.size.y - this.size.y
   };

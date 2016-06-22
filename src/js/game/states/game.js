@@ -3,9 +3,9 @@ var evolution = require('../lib/evolution');
 var reporting = require('../lib/reporting');
 var properties = require('../properties');
 var _ = require('lodash');
-var populationSize = 100;
+var populationSize = 10;
 var maxChaoticGenerations = 10;
-var numChaoticIterations = 30;
+var numChaoticIterations = 10;
 var currentChaoticIterations = 0;
 var maxPackingGenerations = 1000;
 var maxGenerations = 0;
@@ -98,7 +98,12 @@ function trackFittestFromChaos() {
 
 function chooseFittestFromAllChaos() {
   fittest = _.first(_.sortBy(chaosFittest, 'fitness'));
-  currentState = REPORTING;
+  console.log('creating new generation based on network with fitness %s', fittest.fitness);
+  fittest = evolution.createPopulationFromIndividual(fittest);
+  networkToRender = fittest;
+  currentState = EVOLVING;
+  maxGenerations = maxPackingGenerations;
+  nextState = REPORTING;
 }
 
 function createNextGeneration() {
