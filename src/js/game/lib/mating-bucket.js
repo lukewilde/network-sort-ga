@@ -4,14 +4,17 @@ module.exports = {
 
   bucket: [],
 
-  population: null,
+  population: [],
 
   populate: function(population, length) {
 
     this.population = population;
+    this.bucket = [];
 
     _.each(population, _.bind(function(item, index) {
 
+      // Because the population is in order by fitness, we can use the index
+      // as a divisor which gives more bucket slots for earlier items.
       var bucketSlots = Math.round(length / (index + 2));
 
       _.times(bucketSlots, _.bind(function() {
@@ -20,27 +23,28 @@ module.exports = {
     }, this));
   },
 
-  spawnFromPopulation: function(population) {
-    this.population(population, population.length);
-  },
-
-  spawnFromSelection: function(population, length) {
-    this.populate(population, length);
-  },
-
-  getMate: function() {
+  getChildFromBucket: function() {
     var mateIndex = _.sample(this.bucket);
     return this.population[mateIndex];
   },
 
-  getNewPopulation: function(population) {
-    this.spawnFromPopulation(population);
-    var newPopulation = [];
+  getChildrenFromSelection: function(population, length) {
+    this.populate(population, length);
+    return this.getChildren(length);
+  },
 
-    _.each(this.population, _.bind(function() {
-      newPopulation.push(this.getMate());
+  getChildrenFromPopulation: function(population) {
+    this.populate(population, population.length);
+    return this.getChildren(population.length);
+  },
+
+  getChildren: function(populationSize) {
+    var children = [];
+
+    _.times(populationSize, _.bind(function() {
+      children.push(this.getChildFromBucket());
     }, this));
 
-    return newPopulation;
+    return children;
   }
 };

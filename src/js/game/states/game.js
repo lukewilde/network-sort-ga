@@ -2,13 +2,12 @@ var game = {};
 var evolution = require('../lib/evolution');
 var reporting = require('../lib/reporting');
 var properties = require('../properties');
-var _ = require('lodash');
 
 var populationSize = 100;
-var numChaoticIterations = 10;
+var numChaoticIterations = 3;
 
-var maxChaoticGenerations = 100;
-var maxPackingGenerations = 1000;
+var maxChaoticGenerations = 10;
+var maxPackingGenerations = 100;
 var maxGenerations = 0;
 
 var currentChaoticIterations = 0;
@@ -96,9 +95,10 @@ function trackFittestFromChaos() {
 }
 
 function chooseFittestFromAllChaos() {
-  fittest = _.first(_.sortBy(chaosFittest, 'fitness'));
-  console.log('creating new generation based on network with fitness %s', fittest.fitness);
-  fittest = evolution.createPopulationFromIndividual(fittest);
+
+  console.log('creating new generation based on networks with fitness %s', fittest.fitness);
+  fittest = evolution.createPopulationFromSelection(chaosFittest, fittest.fitness);
+
   networkToRender = fittest;
   currentState = EVOLVING;
   maxGenerations = maxPackingGenerations;

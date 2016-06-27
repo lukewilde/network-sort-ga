@@ -6,7 +6,6 @@ var _ = require('lodash');
 
 module.exports = {
   fittest: null,
-  partners: [],
   population: [],
   populationSize: 0,
   chartData: [['Generation', 'Fitness']],
@@ -28,18 +27,20 @@ module.exports = {
     return fittest;
   },
 
-  createPopulationFromIndividual: function(network) {
-    this.population = [];
-    network.rapidMutation = false;
+  createPopulationFromSelection: function(topFromChoas) {
 
-    _.times(this.populationSize, _.bind(function() {
-      var childNetwork = network.mutate();
+    var fittest = _.first(_.sortBy(topFromChoas, 'fitness'));
+    var elites = [];
 
-      this.population.push(childNetwork);
-    }, this));
+    _.each(topFromChoas, function(network) {
+      if (network.fitness === fittest.fitness) {
+        elites.push(network);
+      }
+    });
 
-    var fittest = _.first(this.sortByFitness());
-    this.addToChartData(0, fittest);
+    this.population = matingBucket.getChildrenFromSelection(elites, this.populationSize);
+
+    this.addToChartData(0, this.population[0]);
 
     return fittest;
   },
@@ -51,7 +52,7 @@ module.exports = {
 
     fittest.generation = generationIndex + 1;
 
-    this.population = matingBucket.getNewPopulation(generation);
+    this.population = matingBucket.getChildrenFromPopulation(generation);
 
     this.population = _.map(this.population, function(network) {
       return network.mutate();
