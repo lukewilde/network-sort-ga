@@ -4,10 +4,10 @@ var reporting = require('../lib/reporting');
 var properties = require('../properties');
 
 var populationSize = 100;
-var numChaoticIterations = 3;
+var numChaoticIterations = 10;
 
-var maxChaoticGenerations = 10;
-var maxPackingGenerations = 500;
+var maxChaoticGenerations = 20;
+var maxPackingGenerations = 300;
 var maxGenerations = 0;
 
 var currentChaoticIterations = 0;
