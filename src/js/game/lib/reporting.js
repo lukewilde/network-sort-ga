@@ -1,6 +1,13 @@
 module.exports = {
-  showGraph: function(chartData, maxGenerations) {
-    var data = window.google.visualization.arrayToDataTable(chartData);
+
+  chartData: [['Generation', 'Fitness']],
+
+  addToChartData: function(generation, fittestNetwork) {
+    this.chartData.push([generation, fittestNetwork.fitness]);
+  },
+
+  showGraph: function(maxGenerations) {
+    var data = window.google.visualization.arrayToDataTable(this.chartData);
 
     var options = {
       title: 'Generation vs. Fitness comparison',

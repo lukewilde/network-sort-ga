@@ -1,14 +1,14 @@
+var _ = require('lodash');
 var Network = require('./network');
 var matingBucket = require('./mating-bucket');
 // var networkConfig = require('../graphs/small');
 var networkConfig = require('../graphs/large');
-var _ = require('lodash');
+var reporting = require('../lib/reporting');
 
 module.exports = {
   fittest: null,
   population: [],
   populationSize: 0,
-  chartData: [['Generation', 'Fitness']],
 
   createInitialPopulation: function (populationSize, game, rapidMutation) {
     this.populationSize = populationSize;
@@ -22,7 +22,7 @@ module.exports = {
     }, this));
 
     var fittest = _.first(this.sortByFitness());
-    this.addToChartData(0, fittest);
+    reporting.addToChartData(0, fittest);
 
     return fittest;
   },
@@ -40,7 +40,7 @@ module.exports = {
 
     this.population = matingBucket.getChildrenFromSelection(elites, this.populationSize);
 
-    this.addToChartData(0, this.population[0]);
+    reporting.addToChartData(0, this.population[0]);
 
     return fittest;
   },
@@ -58,13 +58,9 @@ module.exports = {
       return network.mutate();
     });
 
-    this.addToChartData(generationIndex, fittest);
+    reporting.addToChartData(generationIndex, fittest);
 
     return fittest;
-  },
-
-  addToChartData: function(generation, fittestNetwork) {
-    this.chartData.push([generation, fittestNetwork.fitness]);
   },
 
   sortByFitness: function () {
