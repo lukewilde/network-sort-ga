@@ -6,7 +6,7 @@ module.exports = {
 
   population: [],
 
-  populate: function(population, length) {
+  populateByRank: function(population, length) {
 
     this.population = population;
     this.bucket = [];
@@ -23,18 +23,27 @@ module.exports = {
     }, this));
   },
 
+  populateEqually: function(population) {
+    this.population = population;
+    this.bucket = [];
+
+    _.each(population, _.bind(function(item, index) {
+      this.bucket.push(index);
+    }, this));
+  },
+
   getChildFromBucket: function() {
     var mateIndex = _.sample(this.bucket);
     return this.population[mateIndex];
   },
 
   getChildrenFromSelection: function(population, length) {
-    this.populate(population, length);
+    this.populateEqually(population, length);
     return this.getChildren(length);
   },
 
   getChildrenFromPopulation: function(population) {
-    this.populate(population, population.length);
+    this.populateByRank(population, population.length);
     return this.getChildren(population.length);
   },
 
