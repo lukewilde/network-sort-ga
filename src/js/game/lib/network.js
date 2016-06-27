@@ -134,6 +134,18 @@ Network.prototype.draw = function() {
   _.each(this.nodes, function(node) {
     node.drawConnections();
   });
+
+  this.drawStats();
+};
+
+Network.prototype.drawStats = function() {
+  var textStyle = {
+    fill: 'red',
+    fontSize: '22px'
+  };
+
+  this.game.add.text(40, 20, 'Generation:' + this.generation, textStyle);
+  this.game.add.text(40, 45, 'Fitness:' + this.fitness, textStyle);
 };
 
 module.exports = Network;
