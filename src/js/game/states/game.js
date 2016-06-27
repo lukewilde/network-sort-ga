@@ -7,7 +7,7 @@ var populationSize = 100;
 var numChaoticIterations = 3;
 
 var maxChaoticGenerations = 10;
-var maxPackingGenerations = 100;
+var maxPackingGenerations = 500;
 var maxGenerations = 0;
 
 var currentChaoticIterations = 0;
@@ -96,8 +96,8 @@ function trackFittestFromChaos() {
 
 function chooseFittestFromAllChaos() {
 
-  console.log('creating new generation based on networks with fitness %s', fittest.fitness);
   fittest = evolution.createPopulationFromSelection(chaosFittest, fittest.fitness);
+  console.log('creating new generation based on networks with fitness %s', fittest.fitness);
 
   networkToRender = fittest;
   currentState = EVOLVING;
@@ -112,22 +112,23 @@ function createNextGeneration() {
     fittest = networkToRender;
   }
 
-  // console.log('%s:%s', fittest.generation, fittest.fitness);
-
   checkIfMaxGenerations();
 }
 
 function checkIfMaxGenerations() {
   currentGeneration ++;
 
-  if (currentGeneration >= maxGenerations) {
+  if (currentGeneration >= maxGenerations - 1) {
     currentState = nextState;
   }
 }
 
 function report() {
+
   fittest.reportFitness();
+
   console.log('Winner: %s from generation %s', fittest.fitness, fittest.generation);
+
   networkToRender = fittest;
   if (!properties.disableCharts) {
     reporting.showGraph(evolution.chartData, maxGenerations);

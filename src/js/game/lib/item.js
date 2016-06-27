@@ -12,11 +12,11 @@ function Node(config, mother, game, rapidMutation) {
   if (this.rapidMutation) {
     this.mutationRate = 0.01;
     this.approximationRate = 0.3;
-    this.mutationRatio = 2;
+    this.approximationDivisor = 2;
   } else {
     this.mutationRate = 0.009;
     this.approximationRate = 1;
-    this.mutationRatio = 0.1;
+    this.approximationDivisor = 20;
   }
 
   this.config = config;
@@ -107,7 +107,7 @@ Node.prototype.inheritGene = function(gene, mother) {
   result = mother[gene];
 
   if (takeApproximateGene) {
-    result += Math.round(_.random(-1, 1, true) * this.size[gene] / this.mutationRatio);
+    result += Math.round(_.random(-1, 1, true) * (this.size[gene] / this.approximationDivisor));
   }
 
   return Math.round(result);
