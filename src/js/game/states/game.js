@@ -7,7 +7,7 @@ var _ = require('lodash');
 var populationSize = 100;
 var numChaoticIterations = 10;
 
-var maxChaoticGenerations = 30;
+var maxChaoticGenerations = 100;
 var maxPackingGenerations = 1000;
 var maxGenerations = 0;
 

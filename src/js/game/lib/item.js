@@ -3,13 +3,21 @@ var _ = require('lodash');
 var calculateDistance = require('euclidean-distance');
 var md5 = require('md5');
 
-function Node(config, mother, game) {
+function Node(config, mother, game, rapidMutation) {
 
   this.game = game;
 
-  this.mutationRate = 0.01;
-  this.approximationRate = 0.3;
-  this.mutationRatio = 2;
+  this.rapidMutation = rapidMutation;
+
+  if (this.rapidMutation) {
+    this.mutationRate = 0.01;
+    this.approximationRate = 0.3;
+    this.mutationRatio = 2;
+  } else {
+    this.mutationRate = 0.005;
+    this.approximationRate = 0.05;
+    this.mutationRatio = 1;
+  }
 
   this.config = config;
 

@@ -11,12 +11,12 @@ module.exports = {
   populationSize: 0,
   chartData: [['Generation', 'Fitness']],
 
-  createInitialPopulation: function (populationSize, game, ignoreSize) {
+  createInitialPopulation: function (populationSize, game, rapidMutation) {
     this.populationSize = populationSize;
     this.population = [];
 
     _.times(populationSize, _.bind(function() {
-      var network = new Network(networkConfig, game, ignoreSize);
+      var network = new Network(networkConfig, game, rapidMutation);
 
       network.getFirstGeneration();
       this.population.push(network);
@@ -30,7 +30,7 @@ module.exports = {
 
   createPopulationFromIndividual: function(network) {
     this.population = [];
-    network.ignoreSize = false;
+    network.rapidMutation = false;
 
     _.times(this.populationSize, _.bind(function() {
       var childNetwork = network.mutate();

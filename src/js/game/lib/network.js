@@ -1,11 +1,11 @@
 var _ = require('lodash');
 var Item = require('./item');
 
-function Network(config, game, ignoreSize) {
+function Network(config, game, rapidMutation) {
   this.nodes = [];
   this.config = config;
   this.game = game;
-  this.ignoreSize = ignoreSize;
+  this.rapidMutation = rapidMutation;
 
   // This means about 10% - 20% of the population will incur a node swap.
   this.swapChance = 2 / config.length;
@@ -18,14 +18,15 @@ function Network(config, game, ignoreSize) {
     outOfBounds: 6000,
   };
 
-  if (ignoreSize) {
+  // We don't want to shrink the network initially, this ease reorganising the items.
+  if (this.rapidMutation) {
     this.weighting.size = 0;
   }
 }
 
 Network.prototype.getFirstGeneration = function() {
   _.each(this.config, _.bind(function(nodeConfig) {
-    this.nodes.push(new Item(nodeConfig, null, this.game));
+    this.nodes.push(new Item(nodeConfig, null, this.game, this.rapidMutation));
   }, this));
 
   this.connectNodes();
@@ -44,7 +45,7 @@ Network.prototype.mutate = function() {
   var child = new Network(this.config, this.game, this.ignoreSize);
 
   _.each(this.nodes, _.bind(function(node) {
-    child.nodes.push(new Item(node.config, node, this.game));
+    child.nodes.push(new Item(node.config, node, this.game, this.rapidMutation));
   }, this));
 
   child.swapSomeNodes();
