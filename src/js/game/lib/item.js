@@ -14,9 +14,9 @@ function Node(config, mother, game, rapidMutation) {
     this.approximationRate = 0.3;
     this.mutationRatio = 2;
   } else {
-    this.mutationRate = 0.005;
-    this.approximationRate = 0.05;
-    this.mutationRatio = 1;
+    this.mutationRate = 0.009;
+    this.approximationRate = 1;
+    this.mutationRatio = 0.1;
   }
 
   this.config = config;

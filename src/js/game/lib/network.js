@@ -42,7 +42,7 @@ Network.prototype.connectNodes = function() {
 };
 
 Network.prototype.mutate = function() {
-  var child = new Network(this.config, this.game, this.ignoreSize);
+  var child = new Network(this.config, this.game, this.rapidMutation);
 
   _.each(this.nodes, _.bind(function(node) {
     child.nodes.push(new Item(node.config, node, this.game, this.rapidMutation));
