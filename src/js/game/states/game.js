@@ -7,7 +7,7 @@ var populationSize = 100;
 var numChaoticIterations = 10;
 
 var maxChaoticGenerations = 20;
-var maxPackingGenerations = 300;
+var maxPackingGenerations = 500;
 var maxGenerations = 0;
 
 var currentChaoticIterations = 0;
