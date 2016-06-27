@@ -1,47 +1,26 @@
-# A Phaser.js Boilerplate
+# Network Organising Genetic Algorithm
 
-A template to boost the productivity of Phaser.js game developers. Provides tools to improve code reuse, assist in development activities, and can package projects into production ready bundles.
+A GA capable of simplifying the visual organisation of networks of nodes from configuration in JSON.
 
-## What's in the Box
+## Method
 
-[NPM](https://www.npmjs.org/) via [Browserify](http://browserify.org/), [Jade](http://jade-lang.com/), [Stylus](http://learnboost.github.io/stylus/), [Lodash](http://lodash.com/), [JsHint](http://www.jshint.com/), [Uglify.js](https://github.com/mishoo/UglifyJS), [Source maps](http://www.html5rocks.com/en/tutorials/developertools/sourcemaps/), [Stats.js](https://github.com/mrdoob/stats.js/), [Google Analytics](http://www.google.com/analytics/), [Image optimisation tools](http://pngquant.org/), Livereload (auto refresh), Cache busted assets, Zip compression, [.gitignore](https://github.com/serby/GitIgnore)
+The GA initially uses genetic pooling in an attempt to select a number of relatively untangled networks, during this process they ignore network size and mutate heavily. After the pooling phase, a new population is generated from the highest scoring networks. This population mutates more frequently, but with much less magnitude than the pooling phase.
+
+## Ranking
+
+Networks are scored using the following metrics:
+
+* Euclidean distance of lines between all nodes.
+* Area of nodes overlapping, including a padding area.
+* Line intersections.
+* Lines that intersect with other nodes.
+* Nodes which are out of bounds.
 
 ## Installing
 
 ### Node.js and Grunt
 
 You will need to first install [Node.js](http://nodejs.org/download/) and the grunt-cli: `npm install -g grunt-cli`.
-
-### Setup Your Project
-
-Download and unpack [The Phaser.js Boilerplate](https://github.com/lukewilde/phaser-js-boilerplate/archive/master.zip). Or alternatively checkout from source:
-
-    git clone git@github.com:lukewilde/phaser-js-boilerplate.git my-sweet-game
-    cd my-sweet-game
-    git remote rename origin boilerplate
-
-Next, inside the project, you need to install the project's various NPM dependencies:
-
-    npm install
-
-And you should now be ready to spin up a development build of your new project:
-
-    grunt
-
-## Developing
-
-Your first port of call will likely be to customise the properties found in `package.json` and `src/js/game/properties.js`.
-
-All of the files required to run the game will live in the `src` folder, this will include any JavaScript, images, HTML ([Jade](http://jade-lang.com/)), and CSS ([Stylus](http://learnboost.github.io/stylus/)). When the default grunt task is invoked, these files are compiled to a `build` directory.
-
-Files in the `build` directory will always be generated and excluded from Git by the `.gitignore`, as such these will removed without warning and should generally not be edited.
-
-### Recommendations
-
-* Use relative file paths for any assets loaded by your HTML or JavaScript. This will negate any potential path issues when the game is later uploaded to a webserver.
-* If you intend to store development assets (i.e PSD's, Texture Packer files, etc) inside your project, store them outside of the `src` directory to avoid bloating your builds with them.
-* Borwserify is crazy powerful. I'm not going to quote Spiderman, but you should definitely check out [Substack's Browserify Handbook](https://github.com/substack/browserify-handbook).
-* Linting is disabled by default, if you'd like to enforce it for production builds update the `.jshintrc` with rules for your coding style and remove the comment block from jshint directive in the gruntfile's build task.
 
 ### Available Targets
 
@@ -66,20 +45,6 @@ Compiles the current build into `{title}.zip` with an internal folder. This is i
 #### `grunt cocoon`
 
 Compiles the current build into `{title}.zip` ready for upload to [CocoonJs](https://www.ludei.com/cocoonjs/).
-
-### Phaser and it's Physics Engines
-
-You might notice that Phaser isn't actually bundled in with the rest of our Browserify bundle. Bundling it was our first choice initially, however leaving it out enables use of the P2 Physics engine and makes `grunt:browserify` run a whole lot faster. It also gives you the option to pull Phaser from in a [CDN](https://github.com/photonstorm/phaser#cdn).
-
-#### Using P2
-
-The project comes ready to run Phaser with arcade physics, but can easily be adjusted to use the P2 physics engine.
-
-The [`grunt:copy` task](https://github.com/lukewilde/phaser-js-boilerplate/blob/feature/remove-phaser-from-bundle/gruntfile.js#L179-L198) contains directives which can be used in [`grunt:default`](https://github.com/lukewilde/phaser-js-boilerplate/blob/feature/remove-phaser-from-bundle/gruntfile.js#L233) and [`grunt:build`](https://github.com/lukewilde/phaser-js-boilerplate/blob/feature/remove-phaser-from-bundle/gruntfile.js#L249) to copy in your physics engine of choice.
-
-### Updating or Adding Libraries
-
-When adding new libraries that aren't CommonJS compatible, you'll have to update the [Browserify Shim configuration](https://github.com/thlorenz/browserify-shim#3-provide-browserify-shim-config).
 
 ### Coding Style and Linting
 
