@@ -6,12 +6,12 @@ module.exports = {
     this.chartData.push([generation, fittestNetwork.fitness]);
   },
 
-  showGraph: function(maxGenerations) {
+  showGraph: function() {
     var data = window.google.visualization.arrayToDataTable(this.chartData);
 
     var options = {
       title: 'Generation vs. Fitness comparison',
-      hAxis: { title: 'Generation', maxValue: maxGenerations },
+      hAxis: { title: 'Generation' },
       vAxis: { title: 'Fitness' },
       legend: 'none',
       pointSize: 1,

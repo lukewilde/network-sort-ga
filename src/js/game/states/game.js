@@ -140,9 +140,11 @@ function report() {
   console.log('Winner: %s from generation %s', fittest.fitness, fittest.generation);
 
   networkToRender = fittest;
+
   if (!properties.disableCharts) {
-    reporting.showGraph(evolution.chartData, maxGenerations);
+    reporting.showGraph();
   }
+
   currentState = DISPLAY_FITTEST;
 }
 
