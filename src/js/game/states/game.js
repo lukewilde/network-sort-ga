@@ -3,11 +3,11 @@ var evolution = require('../lib/evolution');
 var reporting = require('../lib/reporting');
 var properties = require('../properties');
 
-var populationSize = 75;
+var populationSize = 50;
 var numChaoticSpecies = 10;
 
-var maxChaoticGenerations = 30;
-var maxPackingGenerations = 300;
+var maxChaoticGenerations = 50;
+var maxPackingGenerations = 500;
 var maxGenerations = 0;
 
 var currentChaoticIterations = 0;
