@@ -6,7 +6,7 @@ A GA capable of simplifying the visual organisation of networks of nodes from co
 
 The GA initially uses genetic pooling in an attempt to select a number of relatively untangled networks, during this process they ignore network size and mutate heavily. After the pooling phase, a new population is generated from the highest scoring networks. This population mutates more frequently, but with much less magnitude than the pooling phase.
 
-## Ranking
+## Fitness
 
 Networks are scored using the following metrics:
 
