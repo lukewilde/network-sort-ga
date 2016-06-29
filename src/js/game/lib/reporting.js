@@ -11,8 +11,8 @@ module.exports = {
 
     var options = {
       title: 'Generation vs. Fitness comparison',
-      hAxis: { title: 'Generation', minValue: 0, maxValue: maxGenerations },
-      vAxis: { title: 'Fitness', minValue: 0 },
+      hAxis: { title: 'Generation', maxValue: maxGenerations },
+      vAxis: { title: 'Fitness' },
       legend: 'none',
       pointSize: 1,
       trendlines: {
