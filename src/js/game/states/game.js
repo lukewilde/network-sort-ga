@@ -3,11 +3,11 @@ var evolution = require('../lib/evolution');
 var reporting = require('../lib/reporting');
 var properties = require('../properties');
 
-var populationSize = 10;
+var populationSize = 50;
 var numChaoticSpecies = 10;
 
-var maxChaoticGenerations = 10;
-var maxPackingGenerations = 1;
+var maxChaoticGenerations = 20;
+var maxPackingGenerations = 300;
 var maxGenerations = 0;
 
 var currentChaoticIterations = 0;
@@ -105,8 +105,6 @@ function chooseFittestFromAllChaos() {
   fittest = evolution.createPopulationFromSelection(chaosFittest, fittest.fitness);
   console.log('creating new generation based on networks with fitness %s', fittest.fitness);
 
-  reporting.addToMainlandSeries(0, fittest);
-
   // This is necessary because after chaos we increase fitness by the path distance.
   fittest.fitness = Infinity;
 
@@ -122,7 +120,7 @@ function createNextGeneration() {
   if (nextState === TRACK_FITTEST_FROM_CHAOS) {
     reporting.addToIslandSeries(currentGeneration, networkToRender);
   } else {
-    // reporting.addToMainlandSeries(currentGeneration, networkToRender);
+    reporting.addToMainlandSeries(currentGeneration, networkToRender);
   }
 
   if (fittest.fitness > networkToRender.fitness) {
@@ -149,7 +147,7 @@ function report() {
   networkToRender = fittest;
 
   if (!properties.disableCharts) {
-    reporting.showGraph('island');
+    reporting.showGraphs();
   }
 
   currentState = DISPLAY_FITTEST;
