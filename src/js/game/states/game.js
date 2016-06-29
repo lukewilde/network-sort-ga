@@ -4,7 +4,7 @@ var reporting = require('../lib/reporting');
 var properties = require('../properties');
 
 var populationSize = 100;
-var numChaoticIterations = 10;
+var numChaoticSpecies = 10;
 
 var maxChaoticGenerations = 20;
 var maxPackingGenerations = 500;
@@ -70,7 +70,7 @@ game.render = function() {
 
 function evolveWithChaos() {
 
-  if (numChaoticIterations < currentChaoticIterations) {
+  if (numChaoticSpecies < currentChaoticIterations) {
     currentState = SELECTING;
     return;
   }
@@ -79,6 +79,8 @@ function evolveWithChaos() {
   currentChaoticIterations ++;
 
   fittest = evolution.createInitialPopulation(populationSize, game, true);
+
+  reporting.addToChartData(currentGeneration, fittest);
 
   // Priming the first render.
   networkToRender = fittest;
@@ -99,6 +101,8 @@ function chooseFittestFromAllChaos() {
   fittest = evolution.createPopulationFromSelection(chaosFittest, fittest.fitness);
   console.log('creating new generation based on networks with fitness %s', fittest.fitness);
 
+  reporting.addToChartData(0, fittest);
+
   // This is necessary because after chaos we increase fitness by the path distance.
   fittest.fitness = Infinity;
 
@@ -109,7 +113,10 @@ function chooseFittestFromAllChaos() {
 }
 
 function createNextGeneration() {
-  networkToRender = evolution.nextGeneration(currentGeneration);
+  var reportData = nextState === TRACK_FITTEST_FROM_CHAOS;
+  networkToRender = evolution.nextGeneration(currentGeneration, reportData);
+
+  reporting.addToChartData(currentGeneration, networkToRender);
 
   if (fittest.fitness > networkToRender.fitness) {
     fittest = networkToRender;

@@ -3,7 +3,6 @@ var Network = require('./network');
 var matingBucket = require('./mating-bucket');
 // var networkConfig = require('../graphs/small');
 var networkConfig = require('../graphs/large');
-var reporting = require('../lib/reporting');
 
 module.exports = {
   fittest: null,
@@ -21,10 +20,7 @@ module.exports = {
       this.population.push(network);
     }, this));
 
-    var fittest = _.first(this.sortByFitness());
-    reporting.addToChartData(0, fittest);
-
-    return fittest;
+    return _.first(this.sortByFitness());
   },
 
   createPopulationFromSelection: function(topFromChoas) {
@@ -41,8 +37,6 @@ module.exports = {
 
     this.population = matingBucket.getChildrenFromSelection(elites, this.populationSize);
 
-    reporting.addToChartData(0, this.population[0]);
-
     return fittest;
   },
 
@@ -58,8 +52,6 @@ module.exports = {
     this.population = _.map(this.population, function(network) {
       return network.mutate();
     });
-
-    reporting.addToChartData(generationIndex, fittest);
 
     return fittest;
   },
