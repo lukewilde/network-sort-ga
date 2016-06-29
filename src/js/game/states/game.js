@@ -3,10 +3,10 @@ var evolution = require('../lib/evolution');
 var reporting = require('../lib/reporting');
 var properties = require('../properties');
 
-var populationSize = 100;
-var numChaoticSpecies = 1;
+var populationSize = 10;
+var numChaoticSpecies = 10;
 
-var maxChaoticGenerations = 1;
+var maxChaoticGenerations = 10;
 var maxPackingGenerations = 1;
 var maxGenerations = 0;
 
@@ -28,6 +28,10 @@ var DISPLAY_FITTEST = 6;
 
 var nextState = null;
 var currentState = CHAOTIC_EVOLUTION;
+
+game.create = function() {
+  reporting.setupEvents();
+};
 
 game.update = function() {
   switch (currentState) {
@@ -118,7 +122,7 @@ function createNextGeneration() {
   if (nextState === TRACK_FITTEST_FROM_CHAOS) {
     reporting.addToIslandSeries(currentGeneration, networkToRender);
   } else {
-    reporting.addToMainlandSeries(currentGeneration, networkToRender);
+    // reporting.addToMainlandSeries(currentGeneration, networkToRender);
   }
 
   if (fittest.fitness > networkToRender.fitness) {
@@ -145,7 +149,7 @@ function report() {
   networkToRender = fittest;
 
   if (!properties.disableCharts) {
-    reporting.showGraph();
+    reporting.showGraph('island');
   }
 
   currentState = DISPLAY_FITTEST;

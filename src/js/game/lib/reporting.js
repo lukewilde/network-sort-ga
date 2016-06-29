@@ -1,22 +1,48 @@
 module.exports = {
 
-  islandSeries: [['Generation', 'Fitness']],
-
-  mainSeries: [['Generation', 'Fitness']],
+  series: {
+    island: [['Generation', 'Fitness']],
+    main: [['Generation', 'Fitness']],
+  },
 
   addToIslandSeries: function(generation, fittestNetwork) {
-    this.islandSeries.push([generation, fittestNetwork.fitness]);
+    this.series.island.push([generation, fittestNetwork.fitness]);
   },
 
   addToMainlandSeries: function(generation, fittestNetwork) {
-    this.mainSeries.push([generation, fittestNetwork.fitness]);
+    this.series.main.push([generation, fittestNetwork.fitness]);
   },
 
-  showGraph: function() {
-    var data = window.google.visualization.arrayToDataTable(this.islandSeries);
+  setupEvents: function() {
+    var chartContainer = document.getElementById('chart-container');
+    var showButton = document.getElementsByClassName('show-island')[0];
+
+    chartContainer.style.display = 'block';
+    var graphOpen = true;
+
+    showButton.addEventListener('click', function() {
+      if (graphOpen) {
+        chartContainer.style.left = '-800px';
+      } else {
+        chartContainer.style.left = '0px';
+      }
+
+      graphOpen = !graphOpen;
+    }, false);
+  },
+
+  showGraph: function(series) {
+
+    var title = '';
+
+    if (series === 'island') {
+      title = 'Island Series Fitness';
+    } else {
+      title = 'Mainland Series Fitness';
+    }
 
     var options = {
-      title: 'Generation vs. Fitness comparison',
+      title: title,
       hAxis: { title: 'Generation' },
       vAxis: { title: 'Fitness' },
       legend: 'none',
@@ -33,23 +59,9 @@ module.exports = {
       }
     };
 
-    var chartDiv = document.getElementById('island');
-    var chartContainer = document.getElementById('chart-container');
+    var chartDiv = document.getElementById(series);
     var chart = new window.google.visualization.ScatterChart(chartDiv);
-    var showButton = document.getElementsByClassName('show-island')[0];
-
-    chartContainer.style.display = 'block';
-    var graphOpen = true;
-
-    showButton.addEventListener('click', function() {
-      if (graphOpen) {
-        chartContainer.style.left = '-800px';
-      } else {
-        chartContainer.style.left = '0px';
-      }
-
-      graphOpen = !graphOpen;
-    }, false);
+    var data = window.google.visualization.arrayToDataTable(this.series[series]);
 
     chart.draw(data, options);
   }
