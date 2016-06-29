@@ -6,7 +6,7 @@ var properties = require('../properties');
 var populationSize = 50;
 var maxIslandSpecies = 10;
 
-var maxIslandGenerations = 50;
+var maxIslandGenerations = 30;
 var maxMainlandGenerations = 500;
 var maxGenerations = 0;
 

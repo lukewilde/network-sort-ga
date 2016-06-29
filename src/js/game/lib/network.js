@@ -11,6 +11,10 @@ function Network(config, game, rapidMutation) {
   // This means about 10% - 20% of the population will incur a node swap.
   this.swapChance = 2 / config.length;
 
+  if (this.rapidMutation) {
+    this.swapChance = 4 / config.length;
+  }
+
   this.weighting = {
     size: 1,
     area: 10,
