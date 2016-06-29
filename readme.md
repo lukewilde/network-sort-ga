@@ -45,13 +45,3 @@ Compiles the current build into `{title}.zip` with an internal folder. This is i
 #### `grunt cocoon`
 
 Compiles the current build into `{title}.zip` ready for upload to [CocoonJs](https://www.ludei.com/cocoonjs/).
-
-### Coding Style and Linting
-
-I follow [Ben Gourley's JavaScript Style Guide](https://github.com/bengourley/js-style-guide) (with the exception of using semicolons). I've kept the code footprint low so you can easily include your own `.jshintrc`.
-
-## Created with contributions and inspiration from
-
-  * [Craig Beswetherick](http://grindheadgames.com)
-  * [Jesse Freeman's Phaser template](https://github.com/gamecook/phaser-project-template)
-  * The retired https://github.com/luizbills/phaser-js-boilerplate
