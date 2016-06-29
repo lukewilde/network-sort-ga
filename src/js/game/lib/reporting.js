@@ -21,7 +21,8 @@ module.exports = {
           opacity: 0.5,
           degree: 3,
           lineWidth: 5,
-          type: 'polynomial'
+          type: 'polynomial',
+          tooltip: false
         }
       }
     };
