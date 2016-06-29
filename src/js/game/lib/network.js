@@ -1,5 +1,5 @@
 var _ = require('lodash');
-var Item = require('./item');
+var Node = require('./node');
 
 function Network(config, game, rapidMutation) {
   this.nodes = [];
@@ -26,7 +26,7 @@ function Network(config, game, rapidMutation) {
 
 Network.prototype.getFirstGeneration = function() {
   _.each(this.config, _.bind(function(nodeConfig) {
-    this.nodes.push(new Item(nodeConfig, null, this.game, this.rapidMutation));
+    this.nodes.push(new Node(nodeConfig, null, this.game, this.rapidMutation));
   }, this));
 
   this.connectNodes();
@@ -45,7 +45,7 @@ Network.prototype.mutate = function() {
   var child = new Network(this.config, this.game, this.rapidMutation);
 
   _.each(this.nodes, _.bind(function(node) {
-    child.nodes.push(new Item(node.config, node, this.game, this.rapidMutation));
+    child.nodes.push(new Node(node.config, node, this.game, this.rapidMutation));
   }, this));
 
   child.swapSomeNodes();
