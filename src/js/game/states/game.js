@@ -4,30 +4,30 @@ var reporting = require('../lib/reporting');
 var properties = require('../properties');
 
 var populationSize = 50;
-var numChaoticSpecies = 10;
+var maxIslandSpecies = 10;
 
-var maxChaoticGenerations = 50;
-var maxPackingGenerations = 500;
+var maxIslandGenerations = 50;
+var maxMainlandGenerations = 500;
 var maxGenerations = 0;
 
-var currentChaoticIterations = 0;
+var currentIslandIterations = 0;
 var currentGeneration = 0;
 
-var chaosFittest = [];
+var fittestFromIslands = [];
 
 var fittest = null;
 var networkToRender = null;
 
-var CHAOTIC_EVOLUTION = 0;
-var TRACK_FITTEST_FROM_CHAOS = 1;
-var SELECTING = 2;
+var CREATE_ISLAND_SPECIES = 0;
+var TRACK_FITTEST_FROM_ISLANDS = 1;
+var CHOOSE_FITTEST_FROM_ISLANDS = 2;
 var EVOLVING = 3;
 var REPORTING = 4;
 var DONE = 5;
 var DISPLAY_FITTEST = 6;
 
 var nextState = null;
-var currentState = CHAOTIC_EVOLUTION;
+var currentState = CREATE_ISLAND_SPECIES;
 
 game.create = function() {
   reporting.setupEvents();
@@ -35,14 +35,14 @@ game.create = function() {
 
 game.update = function() {
   switch (currentState) {
-  case CHAOTIC_EVOLUTION:
-    evolveWithChaos();
+  case CREATE_ISLAND_SPECIES:
+    createIslandSpecies();
     break;
-  case TRACK_FITTEST_FROM_CHAOS:
-    trackFittestFromChaos();
+  case TRACK_FITTEST_FROM_ISLANDS:
+    addToFittestFromIslands();
     break;
-  case SELECTING:
-    chooseFittestFromAllChaos();
+  case CHOOSE_FITTEST_FROM_ISLANDS:
+    chooseFittestFromIslands();
     break;
   case EVOLVING:
     createNextGeneration();
@@ -72,15 +72,15 @@ game.render = function() {
   }
 };
 
-function evolveWithChaos() {
+function createIslandSpecies() {
 
-  if (numChaoticSpecies < currentChaoticIterations) {
-    currentState = SELECTING;
+  if (maxIslandSpecies < currentIslandIterations) {
+    currentState = CHOOSE_FITTEST_FROM_ISLANDS;
     return;
   }
 
   currentGeneration = 0;
-  currentChaoticIterations ++;
+  currentIslandIterations ++;
 
   fittest = evolution.createInitialPopulation(populationSize, game, true);
 
@@ -90,21 +90,21 @@ function evolveWithChaos() {
   networkToRender = fittest;
 
   currentState = EVOLVING;
-  nextState = TRACK_FITTEST_FROM_CHAOS;
-  maxGenerations = maxChaoticGenerations;
+  nextState = TRACK_FITTEST_FROM_ISLANDS;
+  maxGenerations = maxIslandGenerations;
 }
 
-function trackFittestFromChaos() {
-  console.log('Overall winner from %s:%s:%s', currentChaoticIterations, fittest.generation, fittest.fitness);
-  chaosFittest.push(fittest);
-  currentState = CHAOTIC_EVOLUTION;
+function addToFittestFromIslands() {
+  console.log('Overall winner from %s:%s:%s', currentIslandIterations, fittest.generation, fittest.fitness);
+  fittestFromIslands.push(fittest);
+  currentState = CREATE_ISLAND_SPECIES;
 }
 
-function chooseFittestFromAllChaos() {
+function chooseFittestFromIslands() {
 
   currentGeneration = 0;
 
-  fittest = evolution.createPopulationFromSelection(chaosFittest, fittest.fitness);
+  fittest = evolution.createPopulationFromSelection(fittestFromIslands, fittest.fitness);
   console.log('creating new generation based on networks with fitness %s', fittest.fitness);
 
   // This is necessary because after chaos we increase fitness by the path distance.
@@ -112,14 +112,14 @@ function chooseFittestFromAllChaos() {
 
   networkToRender = fittest;
   currentState = EVOLVING;
-  maxGenerations = maxPackingGenerations;
+  maxGenerations = maxMainlandGenerations;
   nextState = REPORTING;
 }
 
 function createNextGeneration() {
   networkToRender = evolution.nextGeneration(currentGeneration);
 
-  if (nextState === TRACK_FITTEST_FROM_CHAOS) {
+  if (nextState === TRACK_FITTEST_FROM_ISLANDS) {
     reporting.addToIslandSeries(currentGeneration, networkToRender);
   } else {
     reporting.addToMainlandSeries(currentGeneration, networkToRender);
