@@ -13,6 +13,7 @@ head
 
   script(src="js/phaser.js")
   script(src="js/app.min.js")
+
   if (!properties.disableCharts)
     script(src="//www.gstatic.com/charts/loader.js")
 
@@ -21,8 +22,10 @@ head
 body
   #game
   #chart-container
-    #chart
-    .show-button
+    #island.chart
+    #mainland.chart
+    .show-island.button
+    .show-mainland.button
 
   if (!productionBuild)
     script.

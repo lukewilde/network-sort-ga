@@ -1,13 +1,19 @@
 module.exports = {
 
-  chartData: [['Generation', 'Fitness']],
+  islandSeries: [['Generation', 'Fitness']],
 
-  addToChartData: function(generation, fittestNetwork) {
-    this.chartData.push([generation, fittestNetwork.fitness]);
+  mainSeries: [['Generation', 'Fitness']],
+
+  addToIslandSeries: function(generation, fittestNetwork) {
+    this.islandSeries.push([generation, fittestNetwork.fitness]);
+  },
+
+  addToMainSeries: function(generation, fittestNetwork) {
+    this.mainSeries.push([generation, fittestNetwork.fitness]);
   },
 
   showGraph: function() {
-    var data = window.google.visualization.arrayToDataTable(this.chartData);
+    var data = window.google.visualization.arrayToDataTable(this.islandSeries);
 
     var options = {
       title: 'Generation vs. Fitness comparison',
@@ -27,18 +33,15 @@ module.exports = {
       }
     };
 
-    var chartDiv = document.getElementById('chart');
+    var chartDiv = document.getElementById('island');
     var chartContainer = document.getElementById('chart-container');
-
-
     var chart = new window.google.visualization.ScatterChart(chartDiv);
-
-    var showButton = document.getElementsByClassName('show-button');
+    var showButton = document.getElementsByClassName('show-island')[0];
 
     chartContainer.style.display = 'block';
     var graphOpen = true;
 
-    showButton[0].addEventListener('click', function() {
+    showButton.addEventListener('click', function() {
       if (graphOpen) {
         chartContainer.style.left = '-800px';
       } else {
