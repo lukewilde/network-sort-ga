@@ -8,7 +8,7 @@ module.exports = {
     this.islandSeries.push([generation, fittestNetwork.fitness]);
   },
 
-  addToMainSeries: function(generation, fittestNetwork) {
+  addToMainlandSeries: function(generation, fittestNetwork) {
     this.mainSeries.push([generation, fittestNetwork.fitness]);
   },
 

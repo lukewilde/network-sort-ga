@@ -101,7 +101,7 @@ function chooseFittestFromAllChaos() {
   fittest = evolution.createPopulationFromSelection(chaosFittest, fittest.fitness);
   console.log('creating new generation based on networks with fitness %s', fittest.fitness);
 
-  reporting.addToMainSeries(0, fittest);
+  reporting.addToMainlandSeries(0, fittest);
 
   // This is necessary because after chaos we increase fitness by the path distance.
   fittest.fitness = Infinity;
@@ -118,7 +118,7 @@ function createNextGeneration() {
   if (nextState === TRACK_FITTEST_FROM_CHAOS) {
     reporting.addToIslandSeries(currentGeneration, networkToRender);
   } else {
-    reporting.addToMainSeries(currentGeneration, networkToRender);
+    reporting.addToMainlandSeries(currentGeneration, networkToRender);
   }
 
   if (fittest.fitness > networkToRender.fitness) {
