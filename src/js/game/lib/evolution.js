@@ -45,12 +45,10 @@ module.exports = {
     var generation = this.sortByFitness();
     var fittest = _.first(generation);
 
-    fittest.generation = generationIndex + 1;
-
     this.population = matingBucket.getChildrenFromPopulation(generation);
 
     this.population = _.map(this.population, function(network) {
-      return network.mutate();
+      return network.mutate(generationIndex);
     });
 
     return fittest;

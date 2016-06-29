@@ -6,6 +6,7 @@ function Network(config, game, rapidMutation) {
   this.config = config;
   this.game = game;
   this.rapidMutation = rapidMutation;
+  this.generation = 0;
 
   // This means about 10% - 20% of the population will incur a node swap.
   this.swapChance = 2 / config.length;
@@ -41,8 +42,9 @@ Network.prototype.connectNodes = function() {
   this.fitness = this.getFitness();
 };
 
-Network.prototype.mutate = function() {
+Network.prototype.mutate = function(generation) {
   var child = new Network(this.config, this.game, this.rapidMutation);
+  child.generation = generation;
 
   _.each(this.nodes, _.bind(function(node) {
     child.nodes.push(new Node(node.config, node, this.game, this.rapidMutation));
@@ -144,8 +146,11 @@ Network.prototype.drawStats = function() {
     fontSize: '22px'
   };
 
-  this.game.add.text(40, 20, 'Generation:' + this.generation, textStyle);
-  this.game.add.text(40, 45, 'Fitness:' + this.fitness, textStyle);
+  var species = this.rapidMutation ? 'Island' : 'Mainland';
+
+  this.game.add.text(40, 20, 'Generation: ' + this.generation, textStyle);
+  this.game.add.text(40, 70, 'Species: ' + species, textStyle);
+  this.game.add.text(40, 45, 'Fitness: ' + this.fitness, textStyle);
 };
 
 module.exports = Network;

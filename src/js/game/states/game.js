@@ -3,10 +3,10 @@ var evolution = require('../lib/evolution');
 var reporting = require('../lib/reporting');
 var properties = require('../properties');
 
-var populationSize = 50;
+var populationSize = 75;
 var numChaoticSpecies = 10;
 
-var maxChaoticGenerations = 20;
+var maxChaoticGenerations = 30;
 var maxPackingGenerations = 300;
 var maxGenerations = 0;
 
@@ -101,6 +101,8 @@ function trackFittestFromChaos() {
 }
 
 function chooseFittestFromAllChaos() {
+
+  currentGeneration = 0;
 
   fittest = evolution.createPopulationFromSelection(chaosFittest, fittest.fitness);
   console.log('creating new generation based on networks with fitness %s', fittest.fitness);
