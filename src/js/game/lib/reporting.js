@@ -11,17 +11,7 @@ module.exports = {
     hAxis: { title: 'Generation' },
     vAxis: { title: 'Fitness' },
     legend: 'none',
-    pointSize: 1,
-    trendlines: {
-      0: {
-        color: 'red',
-        opacity: 0.5,
-        degree: 3,
-        lineWidth: 5,
-        type: 'polynomial',
-        tooltip: false
-      }
-    }
+    pointSize: 1
   },
 
   addToIslandSeries: function(generation, fittestNetwork) {
