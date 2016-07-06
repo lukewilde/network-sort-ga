@@ -30,7 +30,7 @@ module.exports = {
 
     _.each(topFromChoas, function(network) {
       if (network.fitness === fittest.fitness) {
-        network.rapidMutation = false;
+        network.disableRapidMutation();
         elites.push(network);
       }
     });

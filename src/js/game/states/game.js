@@ -107,9 +107,6 @@ function chooseFittestFromIslands() {
   fittest = evolution.createPopulationFromSelection(fittestFromIslands, fittest.fitness);
   console.log('creating new generation based on networks with fitness %s', fittest.fitness);
 
-  // This is necessary because after chaos we increase fitness by the path distance.
-  fittest.fitness = Infinity;
-
   networkToRender = fittest;
   currentState = EVOLVE_MAINLAND;
 }

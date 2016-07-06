@@ -7,6 +7,7 @@ function Network(config, game, rapidMutation) {
   this.game = game;
   this.rapidMutation = rapidMutation;
   this.generation = 0;
+  this.defaultSizeWeighting = 1;
 
   // This means about 10% - 20% of the population will incur a node swap.
   this.swapChance = 2 / config.length;
@@ -16,7 +17,7 @@ function Network(config, game, rapidMutation) {
   }
 
   this.weighting = {
-    size: 1,
+    size: this.defaultSizeWeighting,
     area: 10,
     lines: 100,
     intersect: 200,
@@ -28,6 +29,14 @@ function Network(config, game, rapidMutation) {
     this.weighting.size = 0;
   }
 }
+
+Network.prototype.disableRapidMutation = function() {
+  this.weighting.size = this.defaultSizeWeighting;
+  this.rapidMutation = false;
+
+  // Get new fitness so we can compare with future generations.
+  this.fitness = this.getFitness();
+};
 
 Network.prototype.getFirstGeneration = function() {
   _.each(this.config, _.bind(function(nodeConfig) {
