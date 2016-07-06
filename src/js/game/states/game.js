@@ -6,9 +6,8 @@ var properties = require('../properties');
 var populationSize = 50;
 var maxIslandSpecies = 10;
 
-var maxIslandGenerations = 30;
+var maxIslandGenerations = 100;
 var maxMainlandGenerations = 500;
-var maxGenerations = 0;
 
 var currentIslandIterations = 0;
 var currentGeneration = 0;
@@ -21,12 +20,12 @@ var networkToRender = null;
 var CREATE_ISLAND_SPECIES = 0;
 var TRACK_FITTEST_FROM_ISLANDS = 1;
 var CHOOSE_FITTEST_FROM_ISLANDS = 2;
-var EVOLVING = 3;
-var REPORTING = 4;
-var DONE = 5;
-var DISPLAY_FITTEST = 6;
+var EVOLVE_ISLANDS = 3;
+var EVOLVE_MAINLAND = 4;
+var REPORTING = 5;
+var DONE = 6;
+var DISPLAY_FITTEST = 7;
 
-var nextState = null;
 var currentState = CREATE_ISLAND_SPECIES;
 
 game.create = function() {
@@ -44,8 +43,11 @@ game.update = function() {
   case CHOOSE_FITTEST_FROM_ISLANDS:
     chooseFittestFromIslands();
     break;
-  case EVOLVING:
-    createNextGeneration();
+  case EVOLVE_ISLANDS:
+    createNextIslandGeneration();
+    break;
+  case EVOLVE_MAINLAND:
+    createNextMainlandGeneration();
     break;
   case REPORTING:
     report();
@@ -89,9 +91,7 @@ function createIslandSpecies() {
   // Priming the first render.
   networkToRender = fittest;
 
-  currentState = EVOLVING;
-  nextState = TRACK_FITTEST_FROM_ISLANDS;
-  maxGenerations = maxIslandGenerations;
+  currentState = EVOLVE_ISLANDS;
 }
 
 function addToFittestFromIslands() {
@@ -111,33 +111,33 @@ function chooseFittestFromIslands() {
   fittest.fitness = Infinity;
 
   networkToRender = fittest;
-  currentState = EVOLVING;
-  maxGenerations = maxMainlandGenerations;
-  nextState = REPORTING;
+  currentState = EVOLVE_MAINLAND;
 }
 
-function createNextGeneration() {
-  networkToRender = evolution.nextGeneration(currentGeneration);
-
-  if (nextState === TRACK_FITTEST_FROM_ISLANDS) {
-    reporting.addToIslandSeries(currentGeneration, networkToRender);
-  } else {
-    reporting.addToMainlandSeries(currentGeneration, networkToRender);
-  }
-
-  if (fittest.fitness > networkToRender.fitness) {
-    fittest = networkToRender;
-  }
-
-  checkIfMaxGenerations();
+function createNextIslandGeneration() {
+  networkToRender = createNextGeneration(maxIslandGenerations, TRACK_FITTEST_FROM_ISLANDS);
+  reporting.addToIslandSeries(currentGeneration, networkToRender);
 }
 
-function checkIfMaxGenerations() {
+function createNextMainlandGeneration() {
+  networkToRender = createNextGeneration(maxMainlandGenerations, REPORTING);
+  reporting.addToMainlandSeries(currentGeneration, networkToRender);
+}
+
+function createNextGeneration(maxGenerations, nextState) {
+  var generation = evolution.nextGeneration(currentGeneration);
+
+  if (fittest.fitness > generation.fitness) {
+    fittest = generation;
+  }
+
   currentGeneration ++;
 
   if (currentGeneration >= maxGenerations - 1) {
     currentState = nextState;
   }
+
+  return generation;
 }
 
 function report() {
