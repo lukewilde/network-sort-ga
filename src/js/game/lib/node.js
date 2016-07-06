@@ -10,9 +10,9 @@ function Node(config, mother, game, rapidMutation) {
   this.rapidMutation = rapidMutation;
 
   if (this.rapidMutation) {
-    this.mutationRate = 0.03;
-    this.approximationRate = 0.2;
-    this.approximationDivisor = 2;
+    this.mutationRate = 0.02;
+    this.approximationRate = 0.1;
+    this.approximationDivisor = 1;
   } else {
     this.mutationRate = 0.009;
     this.approximationRate = 1;
