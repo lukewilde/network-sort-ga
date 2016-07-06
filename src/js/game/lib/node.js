@@ -193,8 +193,6 @@ Node.prototype.getAreaOfOverlappingNodes = function() {
  * This counts intersections incorrectly. lines will collide with all other
  * lines which connect both the source and the target node. This doesn't matter
  * however, as these will remain consistent no matter how the network evolves.
- *
- * Unless they then ignore collisions with these lines.
  */
 Node.prototype.getNumberOfIntersectingLines = function() {
 
