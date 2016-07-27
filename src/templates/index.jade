@@ -24,8 +24,8 @@ html
     #chart-container
       #island.chart
       #mainland.chart
-      .show-hide-button
-
+      .show-hide-button(title="Here be graphs")
+        span &lt;
     if (!productionBuild)
       script.
         document.write('<script src="//' + window.location.hostname + ':#{properties.liveReloadPort}/livereload.js"><\/script>');
