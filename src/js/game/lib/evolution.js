@@ -23,7 +23,7 @@ module.exports = {
     return _.first(this.sortByFitness());
   },
 
-  createPopulationFromSelection: function(topFromChoas) {
+  createPopulationFromSelection: function(topFromChoas, targetFitness) {
 
     var fittest = _.first(_.sortBy(topFromChoas, 'fitness'));
     var elites = [];
