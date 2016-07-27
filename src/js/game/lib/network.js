@@ -33,9 +33,6 @@ function Network(config, game, rapidMutation) {
 Network.prototype.disableRapidMutation = function() {
   this.weighting.size = this.defaultSizeWeighting;
   this.rapidMutation = false;
-
-  // Get new fitness so we can compare with future generations.
-  this.fitness = this.getFitness();
 };
 
 Network.prototype.getFirstGeneration = function() {

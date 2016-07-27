@@ -25,19 +25,20 @@ module.exports = {
 
   createPopulationFromSelection: function(topFromChoas, targetFitness) {
 
-    var fittest = _.first(_.sortBy(topFromChoas, 'fitness'));
     var elites = [];
 
     _.each(topFromChoas, function(network) {
-      if (network.fitness === fittest.fitness) {
+      if (network.fitness === targetFitness) {
         network.disableRapidMutation();
         elites.push(network);
       }
     });
 
+    console.log('got %s elite members', elites.length);
+
     this.population = matingBucket.getChildrenFromSelection(elites, this.populationSize);
 
-    return fittest;
+    return this.nextGeneration(0);
   },
 
   nextGeneration: function(generationIndex) {

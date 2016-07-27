@@ -107,6 +107,8 @@ function chooseFittestFromIslands() {
   fittest = evolution.createPopulationFromSelection(fittestFromIslands, fittest.fitness);
   console.log('creating new generation based on networks with fitness %s', fittest.fitness);
 
+  fittest.fitness = Infinity;
+
   networkToRender = fittest;
   currentState = EVOLVE_MAINLAND;
 }
