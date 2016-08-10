@@ -34,10 +34,10 @@ function Node(config, mother, game, rapidMutation) {
     y: properties.size.y - this.size.y
   };
 
-  var hash = md5(this.name).substring(0, 6);
-  var colourCode = parseInt(hash, 16);
+  // var hash = md5(this.name).substring(0, 6);
+  // var colourCode = parseInt(hash, 16);
 
-  this.colour = parseInt(colourCode);
+  this.colour = 0xd8d8d8;
 
   this.numberOfConnections = 0;
 
@@ -258,7 +258,7 @@ Node.prototype.drawBox = function() {
 
   var style = {
     font: fontSize + 'px Arial',
-    fill: 'black',
+    fill: '#f9f9f9',
     wordWrap: true,
     wordWrapWidth: this.size.x,
     align: 'center',

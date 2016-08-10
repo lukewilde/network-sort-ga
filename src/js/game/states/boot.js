@@ -9,6 +9,7 @@ boot.create = function () {
   }
 
   this.game.sound.mute = properties.mute;
+  this.game.stage.backgroundColor = 0xFFFFFF;
 
   this.game.state.start('preloader');
 };
