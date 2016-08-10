@@ -140,11 +140,11 @@ Network.prototype.getFitness = function(doReporting) {
 Network.prototype.draw = function() {
 
   _.each(this.nodes, function(node) {
-    node.drawBox();
+    node.drawConnections();
   });
 
   _.each(this.nodes, function(node) {
-    node.drawConnections();
+    node.drawBox();
   });
 
   this.drawStats();
